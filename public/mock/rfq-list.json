@@ -1,0 +1,95 @@
+{
+  "success": true,
+  "data": [
+    {
+      "rfq_id": "RFQ-2026-0547",
+      "email_subject": "Quote QTE-2026-0547 - Industrial Parts",
+      "customer": "Stock Car Steel & Aluminum",
+      "company": "Global Supplies Co.",
+      "received_at": "June 4, 2026 9:15 AM",
+      "products": "1 item",
+      "status": "Quote Sent"
+    },
+    {
+      "rfq_id": "RFQ-2026-0548",
+      "email_subject": "Quote QTE-2026-0548 - Fasteners Bundle",
+      "customer": "NexGen Hardware",
+      "company": "NexGen Korea",
+      "received_at": "June 4, 2026 8:42 AM",
+      "products": "2 items",
+      "status": "Partial Quote"
+    },
+    {
+      "rfq_id": "RFQ-2026-0549",
+      "email_subject": "Quote QTE-2026-0549 - Sheet Metal",
+      "customer": "Precision Sheet Works",
+      "company": "Precision Parts Ltd.",
+      "received_at": "June 4, 2026 8:18 AM",
+      "products": "4 items",
+      "status": "Quote Sent"
+    },
+    {
+      "rfq_id": "RFQ-2026-0550",
+      "email_subject": "Quote QTE-2026-0550 - Hydraulic Fittings",
+      "customer": "Nova Hydraulic",
+      "company": "Acme Corporation",
+      "received_at": "June 3, 2026 4:50 PM",
+      "products": "5 items",
+      "status": "Quote Sent"
+    },
+    {
+      "rfq_id": "RFQ-2026-0551",
+      "email_subject": "Quote QTE-2026-0551 - Precision Bearings",
+      "customer": "Bayside Coating Solutions",
+      "company": "SteelWorks GmbH",
+      "received_at": "June 3, 2026 10:12 AM",
+      "products": "3 items",
+      "status": "Quote Sent"
+    },
+    {
+      "rfq_id": "RFQ-2026-0552",
+      "email_subject": "Quote QTE-2026-0552 - Industrial Tubing",
+      "customer": "Metro Fabrication",
+      "company": "Metro Fabrication LLC",
+      "received_at": "June 2, 2026 2:25 PM",
+      "products": "2 items",
+      "status": "Partial Quote"
+    },
+    {
+      "rfq_id": "RFQ-2026-0553",
+      "email_subject": "Quote QTE-2026-0553 - CNC Tooling",
+      "customer": "Alpha Precision",
+      "company": "Alpha Manufacturing Co.",
+      "received_at": "June 2, 2026 11:05 AM",
+      "products": "6 items",
+      "status": "Quote Sent"
+    },
+    {
+      "rfq_id": "RFQ-2026-0554",
+      "email_subject": "Quote QTE-2026-0554 - Safety Equipment",
+      "customer": "Orbit Supply",
+      "company": "Orbit Supply Chain",
+      "received_at": "June 1, 2026 3:40 PM",
+      "products": "2 items",
+      "status": "Quote Sent"
+    },
+    {
+      "rfq_id": "RFQ-2026-0555",
+      "email_subject": "Quote QTE-2026-0555 - Electrical Parts",
+      "customer": "Prime Electrical",
+      "company": "Prime Industrial Ltd.",
+      "received_at": "May 31, 2026 9:20 AM",
+      "products": "3 items",
+      "status": "Quote Sent"
+    },
+    {
+      "rfq_id": "RFQ-2026-0556",
+      "email_subject": "Quote QTE-2026-0556 - Metal Sheets",
+      "customer": "North Star Metals",
+      "company": "North Star Holdings",
+      "received_at": "May 30, 2026 1:10 PM",
+      "products": "4 items",
+      "status": "Quote Sent"
+    }
+  ]
+}
