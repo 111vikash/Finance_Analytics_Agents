@@ -3,7 +3,7 @@
 import { Mail } from 'lucide-react';
 import PdfPreview from './PdfPreview';
 import Card from './Card';
-import { formatDateTime } from '@/utils/formatDateTime';
+import { formatDateTime } from '@/utils/constants';
 
 export default function QuoteSent({ data }) {
     if (!data) return null;

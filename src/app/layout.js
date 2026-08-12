@@ -28,13 +28,13 @@ const poppins = localFont({
 });
 
 export const metadata = {
-  title: "RFQ Automation",
-  description: "Automate your RFQ process with our solution",
+  title: "Statement Reconciliation",
+  description: "Automate your Statement Reconciliation process with our solution",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html lang="en" className={`${poppins.variable} light h-full antialiased`}>
       <body className="m-0 p-0 bg-bgdeep text-text">{children}</body>
     </html>
   );

@@ -2,7 +2,7 @@
 
 import { CircleCheck, Download } from 'lucide-react';
 import Card from './Card';
-import { formatDateTime } from '@/utils/formatDateTime';
+import { formatDateTime } from '@/utils/constants';
 
 export default function QuoteGenerated({ data }) {
     if (!data) return null;
