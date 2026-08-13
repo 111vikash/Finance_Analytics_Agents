@@ -18,7 +18,7 @@ import Link from "next/link";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutGrid },
-  { name: "Reconciliation Workbench", href: "/reconciliation", icon: Layers3 },
+  { name: "Reconciliation ", href: "/reconciliation", icon: Layers3 },
   { name: "Exceptions", href: "/exceptions", icon: AlertTriangle },
   { name: "Approvals", href: "/approvals", icon: ShieldCheck },
   { name: "Communications", href: "/vendors", icon: MessageSquareMore },

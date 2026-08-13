@@ -82,7 +82,8 @@ export default function FinancialCard() {
   }
 
   return (
-    <div className="w-full rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+    <div className="">
+    {/* <div className="w-full rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm"> */}
      
 
       <div className="grid grid-cols-1 gap-4">
