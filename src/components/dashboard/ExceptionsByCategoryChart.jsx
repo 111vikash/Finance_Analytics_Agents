@@ -14,7 +14,7 @@ export default function ExceptionsByCategoryChart({
   ],
 }) {
   return (
-    <div className="w-[420px] rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
+    <div className="w-full rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-sm font-bold text-slate-800">Exceptions by Category</h3>
         <select className="bg-transparent text-xs text-slate-500 font-medium outline-none cursor-pointer">

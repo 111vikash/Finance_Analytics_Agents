@@ -18,7 +18,7 @@ import Link from "next/link";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutGrid },
-  { name: "Reconciliation ", href: "/reconciliation", icon: Layers3 },
+  { name: "Reconciliation", href: "/reconciliation", icon: Layers3 },
   { name: "Exceptions", href: "/exceptions", icon: AlertTriangle },
   { name: "Approvals", href: "/approvals", icon: ShieldCheck },
   { name: "Communications", href: "/vendors", icon: MessageSquareMore },
@@ -30,8 +30,9 @@ const navItems = [
 
 export default function Navbar({ isSidebarOpen }) {
   const [openDropdowns, setOpenDropdowns] = useState({});
-  const itemKey = (item, parentKey = "") => `${parentKey}/${item.href ?? item.name}`;
   const pathname = usePathname();
+
+  const itemKey = (item, parentKey = "") => `${parentKey}/${item.href ?? item.name}`;
 
   const toggle = (key) => {
     setOpenDropdowns((s) => ({ ...s, [key]: !s[key] }));
@@ -41,12 +42,11 @@ export default function Navbar({ isSidebarOpen }) {
     !!href && (pathname === href || pathname.startsWith(`${href}/`));
 
   return (
-    <nav className="flex flex-col w-full font-semibold text-sm gap-1">
+    <nav className="flex w-full flex-col gap-1 text-sm font-medium">
       {navItems.map((item) => (
         <MenuNode
           key={itemKey(item)}
           item={item}
-          level={0}
           parentKey=""
           itemKeyFn={itemKey}
           isActive={isActive}
@@ -62,10 +62,8 @@ export default function Navbar({ isSidebarOpen }) {
 
 function MenuNode({
   item,
-  level,
   parentKey,
   itemKeyFn,
-  isActive,
   openDropdowns,
   toggle,
   pathname,
@@ -76,32 +74,56 @@ function MenuNode({
   const hasChildren = !!(item.subItems && item.subItems.length > 0);
   const open = !!openDropdowns[key];
 
-  const textVisibilityClass = `transition-opacity duration-200 whitespace-nowrap ${
+  const active =
+    !!item.href && (pathname === item.href || pathname.startsWith(`${item.href}/`));
+
+  const textVisibilityClass = `transition-all duration-200 whitespace-nowrap ${
     isSidebarOpen
       ? "opacity-100 visible"
       : "lg:opacity-0 lg:invisible lg:group-hover:opacity-100 lg:group-hover:visible"
   }`;
 
-  const active = !!item.href && (pathname === item.href || pathname.startsWith(`${item.href}/`));
+  const baseItemClass =
+    "group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200";
+
+  const activeClass =
+    "bg-white text-dgem-dark-blue shadow-sm ring-1 ring-white/20";
+
+  const inactiveClass =
+    "text-white/75 hover:bg-white/10 hover:text-white";
+
+  const disabledClass =
+    "text-white/40 cursor-not-allowed pointer-events-none opacity-70";
 
   if (hasChildren) {
     return (
       <div className="w-full">
         <button
           type="button"
-          className={`flex items-center justify-between w-full p-3 rounded-2xl transition-all duration-300
-            ${active ? "bg-gradient-to-r from-dgem-blue/10 to-dgem-light-blue/10 text-dgem-blue" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}
-            ${item.inactive ? "text-slate-400 cursor-not-allowed" : ""}`}
+          className={`${baseItemClass} justify-between ${
+            active ? activeClass : inactiveClass
+          } ${item.inactive ? disabledClass : ""}`}
           onClick={() => !item.inactive && toggle(key)}
           disabled={item.inactive}
           aria-expanded={open}
         >
-          <div className="flex items-center gap-3 min-w-[20px]">
-            {Icon && <Icon className={`w-5 h-5 shrink-0 ${active ? "text-dgem-blue" : "text-slate-500"}`} />}
+          <div className="flex min-w-0 items-center gap-3">
+            <Icon
+              className={`h-5 w-5 shrink-0 ${
+                active
+                  ? "text-dgem-dark-blue"
+                  : "text-white/70 group-hover:text-white"
+              }`}
+            />
             <span className={textVisibilityClass}>{item.name}</span>
           </div>
+
           <div className={textVisibilityClass}>
-            {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            {open ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
           </div>
         </button>
       </div>
@@ -114,25 +136,27 @@ function MenuNode({
     <Link
       href={item.inactive ? "#" : item.href || "#"}
       target={external ? "_blank" : "_self"}
-      className={`group flex items-center w-full rounded-2xl gap-3 px-4 py-3 text-sm font-medium transition-all duration-200
-        ${active ? "bg-gradient-to-r from-dgem-blue to-dgem-light-blue text-white shadow-md shadow-dgem-blue/20" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}
-        ${item.inactive ? "text-slate-400 cursor-not-allowed pointer-events-none" : ""}`}
+      className={`${baseItemClass} ${
+        active ? activeClass : inactiveClass
+      } ${item.inactive ? disabledClass : ""}`}
     >
-      {Icon && (
-        <Icon
-          className={`w-5 h-5 shrink-0 ${
-            active ? "text-white" : "text-slate-500 group-hover:text-slate-900"
-          }`}
-        />
-      )}
+      <Icon
+        className={`h-5 w-5 shrink-0 ${
+          active
+            ? "text-dgem-dark-blue"
+            : "text-white/70 group-hover:text-white"
+        }`}
+      />
 
-      <span className={textVisibilityClass}>{item.name}</span>
+      <span className={`${textVisibilityClass} flex-1`}>{item.name}</span>
 
       {item.badge && (
         <span
-          className={`ml-auto rounded-full bg-dgem-turquoise px-3 py-1 text-[10px] font-semibold text-dgem-dark-blue transition-opacity duration-200 ${
-            isSidebarOpen ? "opacity-100" : "lg:opacity-0 lg:group-hover:opacity-100"
-          }`}
+          className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold transition-opacity duration-200 ${
+            active
+              ? "bg-dgem-dark-blue text-white"
+              : "bg-dgem-turquoise text-dgem-dark-blue"
+          } ${isSidebarOpen ? "opacity-100" : "lg:opacity-0 lg:group-hover:opacity-100"}`}
         >
           {item.badge}
         </span>

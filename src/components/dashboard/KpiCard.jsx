@@ -11,41 +11,79 @@ export default function KpiCard({
   iconBgColor = "bg-dgem-blue/10",
   cardBgColor = "bg-white",
   accent = {},
+  vertical = false,
 }) {
   return (
     <div
-      className={`group flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${cardBgColor} ${accent.border || "border-[var(--border)]"}`}
+      className={`group h-full rounded-xl border p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:p-3.5 ${
+        vertical
+          ? "flex min-h-[170px] flex-col items-center text-center"
+          : "flex items-center gap-2.5 sm:gap-3"
+      } ${cardBgColor} ${accent.border || "border-[var(--border)]"}`}
     >
-      <div
-        className={`flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-300 group-hover:scale-105 ${iconBgColor}`}
-      >
-        <Icon className={`h-7 w-7 ${iconColor}`} />
-      </div>
+      {vertical ? (
+        <>
+          <div
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105 sm:h-11 sm:w-11 ${iconBgColor}`}
+          >
+            <Icon className={`h-4.5 w-4.5 sm:h-5 sm:w-5 ${iconColor}`} />
+          </div>
 
-      <div className="min-w-0 flex-1">
-        <div className="font-semibold uppercase tracking-[0.2em] text-[12px]">
-          {label}
-        </div>
+          <div className="mt-3 flex w-full flex-1 flex-col items-center">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 sm:text-[11px]">
+              {label}
+            </div>
 
-        <div className="mt-2 text-2xl font-bold tracking-tight text-[var(--text)]">
-          {value}
-        </div>
+            <div className="mt-1 text-[16px] font-bold leading-tight tracking-tight text-[var(--text)] sm:text-lg">
+              {value}
+            </div>
 
-        <div
-          className={`mt-2 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium ${
-            isTrendPositive
-              ? "bg-emerald-50 text-emerald-600"
-              : "bg-rose-50 text-rose-600"
-          }`}
-        >
-          {isTrendPositive ? (
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          ) : (
-            <ArrowDownRight className="h-3.5 w-3.5" />
-          )}
-          {change}
-        </div>
-      </div>
+            <div
+              className={`mt-auto pt-3 flex items-center gap-1 text-[10px] font-medium sm:text-[11px] ${
+                isTrendPositive ? "text-emerald-600" : "text-rose-600"
+              }`}
+            >
+              {isTrendPositive ? (
+                <ArrowUpRight className="h-3 w-3" />
+              ) : (
+                <ArrowDownRight className="h-3 w-3" />
+              )}
+              <span>{change}</span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105 sm:h-11 sm:w-11 ${iconBgColor}`}
+          >
+            <Icon className={`h-4.5 w-4.5 sm:h-5 sm:w-5 ${iconColor}`} />
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 sm:text-[11px]">
+              {label}
+            </div>
+
+            <div className="mt-0.5 text-[17px] font-bold leading-tight tracking-tight text-[var(--text)] sm:text-lg">
+              {value}
+            </div>
+
+            <div
+              className={`mt-1 flex items-center gap-1 text-[10px] font-medium sm:text-[11px] ${
+                isTrendPositive ? "text-emerald-600" : "text-rose-600"
+              }`}
+            >
+              {isTrendPositive ? (
+                <ArrowUpRight className="h-3 w-3" />
+              ) : (
+                <ArrowDownRight className="h-3 w-3" />
+              )}
+              <span>{change}</span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

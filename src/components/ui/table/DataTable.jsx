@@ -1,239 +1,324 @@
-'use client';
+"use client";
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from "react";
 import {
-    useReactTable,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    flexRender,
-} from '@tanstack/react-table';
-import { Search } from 'lucide-react';
-import Input from '../Input';
-import Link from 'next/link';
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  flexRender,
+} from "@tanstack/react-table";
+import {
+  Search,
+  SlidersHorizontal,
+  Sliders,
+  Building2,
+  CalendarDays,
+  BadgeCheck,
+} from "lucide-react";
+
+import { Button } from "@/components/common/Button";
 
 const customGlobalFilterFn = (row, columnId, filterValue) => {
-    const { search, status } = filterValue || {};
+  const { search, tabStatus, vendor, period, status } = filterValue || {};
 
-    if (search) {
-        const searchLower = search.toLowerCase();
-        const matchesSearch = row.getAllCells().some((cell) => {
-            const value = cell.getValue();
-            return value ? String(value).toLowerCase().includes(searchLower) : false;
-        });
-        if (!matchesSearch) return false;
+  if (search) {
+    const searchLower = search.toLowerCase();
+    const matchesSearch = row.getAllCells().some((cell) => {
+      const value = cell.getValue();
+      return value ? String(value).toLowerCase().includes(searchLower) : false;
+    });
+    if (!matchesSearch) return false;
+  }
+
+  if (tabStatus && tabStatus !== "All") {
+    if (tabStatus === "Exceptions") {
+      if (row.original?.status !== "Unmatched") return false;
+    } else if (row.original?.status !== tabStatus) {
+      return false;
     }
+  }
 
-    if (status && row.original?.status !== status) {
-        return false;
-    }
+  if (vendor && vendor !== "(All)" && row.original?.vendor !== vendor) return false;
+  if (period && period !== "(All)" && row.original?.period !== period) return false;
+  if (status && status !== "(All)" && row.original?.status !== status) return false;
 
-    return true;
+  return true;
 };
 
 export const UniversalTable = ({ data = [], columns = [] }) => {
-    const [globalFilter, setGlobalFilter] = useState({
-        search: '',
-        status: '',
-        dateRange: '',
-    });
+  const [globalFilter, setGlobalFilter] = useState({
+    search: "",
+    tabStatus: "All",
+    vendor: "(All)",
+    period: "(All)",
+    status: "(All)",
+  });
 
-    const safeData = useMemo(() => (Array.isArray(data) ? data : []), [data]);
-    const safeColumns = useMemo(() => (Array.isArray(columns) ? columns : []), [columns]);
+  const safeData = useMemo(() => (Array.isArray(data) ? data : []), [data]);
+  const safeColumns = useMemo(() => (Array.isArray(columns) ? columns : []), [columns]);
 
-    const table = useReactTable({
-        data: safeData,
-        columns: safeColumns,
-        state: { globalFilter },
-        onGlobalFilterChange: setGlobalFilter,
-        globalFilterFn: customGlobalFilterFn,
-        getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-    });
+  const table = useReactTable({
+    data: safeData,
+    columns: safeColumns,
+    state: { globalFilter },
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: customGlobalFilterFn,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: { pageSize: 10, pageIndex: 0 },
+    },
+  });
 
-    const headerGroups = table.getHeaderGroups() || [];
-    const rows = table.getRowModel()?.rows || [];
+  const tabs = [
+    { key: "All", label: "All Items", count: safeData.length },
+    { key: "Matched", label: "Matched", count: safeData.filter((i) => i?.status === "Matched").length },
+    { key: "Partially Matched", label: "Partially Matched", count: safeData.filter((i) => i?.status === "Partially Matched").length },
+    { key: "Unmatched", label: "Unmatched", count: safeData.filter((i) => i?.status === "Unmatched").length },
+    { key: "Exceptions", label: "Exceptions", count: safeData.filter((i) => i?.status === "Unmatched" && i?.confidence === "-").length },
+  ];
 
-    return (
-        <div className="overflow-hidden rounded-b-[28px]">
-            {/* FILTER BAR */}
-            <div className="border-b border-slate-700 bg-slate-950/70 px-6 py-5">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    {/* Search */}
-                    <div className="w-full lg:max-w-md">
-                        <label className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                            Search Here
-                        </label>
-                        <div className="relative">
-                            <Search
-                                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
-                                size={15}
-                            />
-                            <input
-                                type="search"
-                                placeholder="Search RFQ, customer or company"
-                                aria-label="Search RFQs"
-                                value={globalFilter.search}
-                                onChange={(e) =>
-                                    setGlobalFilter((prev) => ({ ...prev, search: e.target.value }))
-                                }
-                                className="w-full rounded-full border border-slate-700 bg-slate-900 px-4 py-3 pl-11 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
-                            />
-                        </div>
-                    </div>
+  const uniqueVendors = ["(All)", ...new Set(safeData.map((row) => row.vendor).filter(Boolean))];
+  const uniquePeriods = ["(All)", ...new Set(safeData.map((row) => row.period).filter(Boolean))];
+  const uniqueStatuses = ["(All)", "Matched", "Partially Matched", "Unmatched"];
 
-                    {/* Quote filters */}
-                    <div className="flex flex-wrap items-end gap-3">
-                        <div>
-                            <label className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                                Filter by Status
-                            </label>
+  const headerGroups = table.getHeaderGroups();
+  const rows = table.getRowModel().rows;
 
-                            <div className="flex flex-wrap gap-2">
-                                {[
-                                    { key: 'running', label: 'Running', color: 'blue' },
-                                    { key: 'success', label: 'Quote Sent', color: 'emerald' },
-                                    { key: 'partial', label: 'Partial Quote', color: 'amber' },
-                                    { key: 'failed', label: 'Failed', color: 'rose' },
-                                ].map(({ key, label, color }) => {
-                                    const isActive = globalFilter.status === key;
-                                    const count = safeData.filter((item) => item?.status === key).length;
+  const pageIndex = table.getState().pagination.pageIndex;
+  const pageSize = table.getState().pagination.pageSize;
+  const totalFiltered = table.getFilteredRowModel().rows.length;
+  const startItem = totalFiltered === 0 ? 0 : pageIndex * pageSize + 1;
+  const endItem = Math.min((pageIndex + 1) * pageSize, totalFiltered);
 
-                                    const activeClasses = {
-                                        blue: 'border-blue-500/20 bg-blue-500/10 text-blue-400',
-                                        emerald: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
-                                        amber: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
-                                        rose: 'border-rose-500/20 bg-rose-500/10 text-rose-400',
-                                    };
-
-                                    const countActiveClasses = {
-                                        blue: 'bg-blue-500/20 text-blue-300',
-                                        emerald: 'bg-emerald-500/20 text-emerald-300',
-                                        amber: 'bg-amber-500/20 text-amber-300',
-                                        rose: 'bg-rose-500/20 text-rose-300',
-                                    };
-
-                                    return (
-                                        <button
-                                            key={key}
-                                            type="button"
-                                            onClick={() =>
-                                                setGlobalFilter((prev) => ({
-                                                    ...prev,
-                                                    status: prev.status === key ? '' : key,
-                                                }))
-                                            }
-                                            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition
-                            ${isActive
-                                                    ? activeClasses[color]
-                                                    : 'border-slate-700 bg-slate-900 text-slate-400 hover:border-slate-600 hover:text-slate-200'
-                                                }`}
-                                        >
-                                            <span>{label}</span>
-                                            <span
-                                                className={`rounded-full px-2 py-0.5 text-[11px]
-                                ${isActive ? countActiveClasses[color] : 'bg-slate-800 text-slate-300'}`}
-                                            >
-                                                {count}
-                                            </span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* TABLE */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse text-left text-[13px] text-slate-300">
-                    <thead className="bg-slate-950/90">
-                        {headerGroups.map((headerGroup) => (
-                            <tr key={headerGroup.id}>
-                                {(headerGroup.headers || []).map((header) => (
-                                    <th
-                                        key={header.id}
-                                        className="border-b border-slate-700 px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500"
-                                    >
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(header.column.columnDef.header, header.getContext())}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-
-                    <tbody>
-                        {rows.length === 0 ? (
-                            <tr>
-                                <td colSpan={safeColumns.length} className="px-6 py-10 text-center text-slate-500">
-                                    No matching records found.
-                                </td>
-                            </tr>
-                        ) : (
-                            rows.map((row) => (
-                                <tr
-                                    key={row.id}
-                                    className="border-b border-slate-800 transition hover:bg-white/5"
-                                >
-                                    {(row.getVisibleCells() || []).map((cell) => (
-                                        <td key={cell.id} className="px-6 py-4 align-middle text-slate-300">
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* PAGINATION */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-700 bg-slate-950/80 px-6 py-4 text-sm text-slate-400">
-                <div className="flex items-center gap-2">
-                    <span>Items per page:</span>
-                    <select
-                        value={table.getState().pagination.pageSize}
-                        onChange={(e) => table.setPageSize(Number(e.target.value))}
-                        className="rounded-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-amber-400"
-                    >
-                        {[5, 10, 15, 20].map((size) => (
-                            <option key={size} value={size}>
-                                {size}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <span>
-                        Page <strong className="text-slate-200">{table.getState().pagination.pageIndex + 1}</strong> of{' '}
-                        <strong className="text-slate-200">{table.getPageCount() || 1}</strong>
-                    </span>
-
-                    <div className="flex gap-2">
-                        <button
-                            type="button"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                            className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-amber-400 hover:text-amber-400 disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                            ‹ Previous
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                            className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-amber-400 hover:text-amber-400 disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                            Next ›
-                        </button>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="w-full space-y-4">
+      {/* Filters */}
+      <div className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-5">
+        <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <SlidersHorizontal size={16} className="text-[#0b57d0]" />
+          Workbench Filters
         </div>
-    );
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold text-slate-500">
+              Vendor
+            </label>
+            <div className="relative">
+              <Building2
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                size={16}
+              />
+              <select
+                value={globalFilter.vendor}
+                onChange={(e) =>
+                  setGlobalFilter((prev) => ({ ...prev, vendor: e.target.value }))
+                }
+                className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 py-2.5 pl-10 text-sm outline-none focus:border-[#0b57d0]"
+              >
+                {uniqueVendors.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold text-slate-500">
+              Statement Period
+            </label>
+            <div className="relative">
+              <CalendarDays
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                size={16}
+              />
+              <select
+                value={globalFilter.period}
+                onChange={(e) =>
+                  setGlobalFilter((prev) => ({ ...prev, period: e.target.value }))
+                }
+                className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 py-2.5 pl-10 text-sm outline-none focus:border-[#0b57d0]"
+              >
+                {uniquePeriods.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold text-slate-500">
+              Match Status
+            </label>
+            <div className="relative">
+              <BadgeCheck
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                size={16}
+              />
+              <select
+                value={globalFilter.status}
+                onChange={(e) =>
+                  setGlobalFilter((prev) => ({ ...prev, status: e.target.value }))
+                }
+                className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 py-2.5 pl-10 text-sm outline-none focus:border-[#0b57d0]"
+              >
+                {uniqueStatuses.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <Search
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              size={16}
+            />
+            <input
+              type="text"
+              placeholder="Search by Invoice / Reference / Amount"
+              value={globalFilter.search}
+              onChange={(e) =>
+                setGlobalFilter((prev) => ({ ...prev, search: e.target.value }))
+              }
+              className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-11 pr-4 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all focus:border-[#0b57d0] focus:ring-2 focus:ring-[#0b57d0]/5"
+            />
+          </div>
+
+          <Button variant="secondary" icon={SlidersHorizontal} className="whitespace-nowrap">
+            Advanced Filters
+          </Button>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="no-scrollbar flex overflow-x-auto border-b border-slate-200 bg-white">
+          {tabs.map(({ key, label, count }) => {
+            const isActive = globalFilter.tabStatus === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() =>
+                  setGlobalFilter((prev) => ({ ...prev, tabStatus: key }))
+                }
+                className={`whitespace-nowrap border-b-2 px-6 py-4 text-xs font-semibold transition-all duration-150 ${
+                  isActive
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                {label}{" "}
+                <span
+                  className={`ml-0.5 text-[11px] font-medium ${
+                    isActive ? "text-blue-500" : "text-slate-400"
+                  }`}
+                >
+                  ({count})
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse text-left text-xs font-medium text-slate-600">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr key={headerGroup.id} className="border-b border-slate-200 bg-slate-50">
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+
+            <tbody className="divide-y divide-slate-100">
+              {rows.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={safeColumns.length || 1}
+                    className="bg-slate-50/20 px-6 py-12 text-center text-sm font-normal text-slate-400"
+                  >
+                    No matching items found. Try modifying filter parameters.
+                  </td>
+                </tr>
+              ) : (
+                rows.map((row) => (
+                  <tr key={row.id} className="group transition hover:bg-slate-50/80">
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id} className="whitespace-nowrap px-6 py-3.5 align-middle">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex flex-col gap-4 border-t border-slate-100 bg-white px-6 py-4 text-xs font-medium text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            Showing {startItem} to {endItem} of {totalFiltered} items
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              className="h-8 w-8 rounded-lg border border-slate-200 px-0 text-slate-600 disabled:opacity-40"
+            >
+              ‹
+            </Button>
+
+            <span className="text-xs text-slate-500">
+              Page {pageIndex + 1} of {table.getPageCount()}
+            </span>
+
+            <Button
+              variant="secondary"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              className="h-8 w-8 rounded-lg border border-slate-200 px-0 text-slate-600 disabled:opacity-40"
+            >
+              ›
+            </Button>
+
+            <select
+              value={pageSize}
+              onChange={(e) => table.setPageSize(Number(e.target.value))}
+              className="cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 outline-none focus:border-[#0b57d0]"
+            >
+              {[5, 10, 25, 50].map((size) => (
+                <option key={size} value={size}>
+                  {size} / page
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };

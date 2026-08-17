@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   FileSpreadsheet,
   FolderOpen,
   History,
   CreditCard,
 } from "lucide-react";
-import axiosInstance from "./../../app/lib/api";
 import KpiCard from "./KpiCard";
 
 const iconMap = {
@@ -50,44 +49,11 @@ const styleMap = {
   },
 };
 
-export default function FinancialCard() {
-  const [dashboardData, setDashboardData] = useState({
-    title: "Financial KPIs",
-    lastUpdated: "",
-    financialKpis: [],
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axiosInstance.get("/data/data.json");
-        setDashboardData(res.data);
-      } catch (error) {
-        console.error("Failed to load financial KPI data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getData();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm">
-        Loading financial KPI cards...
-      </div>
-    );
-  }
-
+export default function FinancialCard({ financialKpis = [] }) {
   return (
-    <div className="">
-    {/* <div className="w-full rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm"> */}
-     
-
+    <div className="w-full">
       <div className="grid grid-cols-1 gap-4">
-        {(dashboardData.financialKpis || []).map((kpi, idx) => {
+        {financialKpis.map((kpi, idx) => {
           const Icon = iconMap[kpi.icon] || FileSpreadsheet;
           const styles = styleMap[kpi.icon] || {};
 

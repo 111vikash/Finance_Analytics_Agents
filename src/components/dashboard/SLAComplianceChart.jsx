@@ -1,31 +1,36 @@
 import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
-// Matches the exact chart colors from the dashboard image
-const SLA_COLORS = ["#22c55e", "#f97316", "#ef4444"]; 
+const SLA_COLORS = ["#22c55e", "#f97316", "#ef4444"];
 
-export default function SLAComplianceChart({
-  data = [
-    { name: "Compliant", value: 95.6, count: 1176 },
-    { name: "At Risk", value: 3.2, count: 40 },
-    { name: "Breached", value: 1.2, count: 15 },
-  ],
-}) {
+export default function SLAComplianceChart({ progressData = [] }) {
+  const data =
+    progressData.length > 0
+      ? progressData.map((item, idx) => ({
+          name: item.name,
+          value: item.value,
+          count: item.count || 0,
+        }))
+      : [
+          { name: "Compliant", value: 95.6, count: 1176 },
+          { name: "At Risk", value: 3.2, count: 40 },
+          { name: "Breached", value: 1.2, count: 15 },
+        ];
+
   return (
-    <div className="w-[380px] rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
+    <div className="w-full rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-sm font-bold text-slate-800">SLA Compliance</h3>
-        <select className="bg-transparent text-xs text-slate-500 font-medium outline-none cursor-pointer">
+        <select className="cursor-pointer bg-transparent text-xs font-medium text-slate-500 outline-none">
           <option>May 2025</option>
         </select>
       </div>
 
       <div className="flex items-center gap-6">
-        {/* Radial/Pie Wrapper */}
         <div className="relative h-[150px] w-[150px] shrink-0">
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span className="text-2xl font-bold text-slate-900">95.6%</span>
-            <span className="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-600">
               Compliant
             </span>
           </div>
@@ -43,26 +48,25 @@ export default function SLAComplianceChart({
                 endAngle={-270}
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={SLA_COLORS[index]} stroke="none" />
+                  <Cell key={`cell-${index}`} fill={SLA_COLORS[index % SLA_COLORS.length]} stroke="none" />
                 ))}
               </Pie>
             </PieChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Legend Panel */}
-        <div className="flex flex-col gap-3 flex-1 text-xs">
+        <div className="flex flex-1 flex-col gap-3 text-xs">
           {data.map((item, idx) => (
             <div key={item.name} className="flex items-center justify-between font-medium">
               <div className="flex items-center gap-2">
                 <span
-                  className="h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: SLA_COLORS[idx] }}
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: SLA_COLORS[idx % SLA_COLORS.length] }}
                 />
                 <span className="text-slate-500">{item.name}</span>
               </div>
               <span className="text-slate-800">
-                {item.value}% <span className="text-slate-400 font-normal">({item.count})</span>
+                {item.value}% <span className="font-normal text-slate-400">({item.count})</span>
               </span>
             </div>
           ))}

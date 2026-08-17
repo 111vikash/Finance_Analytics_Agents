@@ -10,60 +10,62 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     <>
       <div
         className={`fixed inset-0 z-40 bg-dgem-dark-blue/30 transition-opacity duration-300 lg:hidden ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={() => setIsOpen(false)}
       />
 
       <aside
         className={`
-          group fixed inset-y-0 left-0 z-50 flex h-full flex-col
-          bg-white text-dgem-dark-blue border-r border-slate-200
-          shadow-[0_10px_40px_rgba(18,26,56,0.08)]
-          transition-all duration-300 ease-in-out overflow-hidden
+          group fixed inset-y-0 left-0 z-50 flex h-full flex-col overflow-hidden
+          bg-dgem-dark-blue text-dgem-white
+          border-r border-white/10
+          shadow-[0_10px_40px_rgba(18,26,56,0.18)]
+          transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}
           lg:translate-x-0 lg:absolute
           ${isOpen ? "lg:w-64" : "lg:w-16 lg:hover:w-64 lg:hover:shadow-2xl lg:hover:z-50"}
         `}
       >
-        <div className="flex p-[1.43rem_1.5rem_24px] shrink-0 items-center justify-between px-4 border-b border-slate-200 relative overflow-hidden bg-white">
+        <div className="relative flex shrink-0 items-center justify-between border-b border-white/10 bg-dgem-dark-blue px-4 py-4">
           <div
             className={`
-              flex items-center gap-3 transition-all duration-200 whitespace-nowrap
-              ${isOpen ? "opacity-100" : "lg:group-hover:flex lg:group-hover:opacity-100 lg:opacity-0"}
+              w-full flex items-center gap-3  whitespace-nowrap transition-all duration-200
+              ${isOpen ? "opacity-100" : "lg:opacity-0 lg:group-hover:opacity-100"}
             `}
           >
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-dgem-blue to-dgem-light-blue flex items-center justify-center text-white font-bold shadow-md">
-              R
-            </div>
+         
 
-            <div>
-              <div className="text-md font-semibold text-dgem-dark-blue">ReconFlow</div>
-              <div className="text-xs text-slate-500">Statement Reconciliation</div>
+            <div className="flex flex-col items-center w-full">
+              <div className="text-base  font-semibold text-dgem-white">
+              
+         <div className=""> <img src="/pw.png" alt=""  className="h-14  mx-2"/></div>
+              </div>
+              <div className="pt-2 text-center text-white/70">
+                Agentic Statement <br /> reconciliation
+              </div>
             </div>
           </div>
 
           <button
             onClick={() => setIsOpen(false)}
-            className="text-slate-500 hover:text-dgem-dark-blue lg:hidden transition-colors"
+            className="text-white/70 transition-colors hover:text-white lg:hidden"
             aria-label="Close sidebar"
           >
             <X size={20} />
           </button>
 
           {!isOpen && (
-            <div className="hidden lg:flex lg:group-hover:hidden w-8 h-8 shrink-0 items-center justify-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200">
-              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-dgem-blue to-dgem-light-blue" />
+            <div className="absolute left-1/2 top-1/2 hidden h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center lg:flex lg:group-hover:hidden">
+              <div className="h-8 w-8 rounded-xl bg-dgem-blue" />
             </div>
           )}
         </div>
 
-        <div className="relative flex-1 w-full px-3 overflow-y-auto py-4 overflow-x-hidden scrollbar-thin">
-          <div className="relative z-10">
-            <Navbar isSidebarOpen={isOpen} />
-          </div>
+        <div className="relative flex-1 overflow-y-auto overflow-x-hidden px-2 py-3 scrollbar-thin">
+          <Navbar isSidebarOpen={isOpen} />
         </div>
-
+  
         <UserProfile isSidebarOpen={isOpen} />
       </aside>
     </>
