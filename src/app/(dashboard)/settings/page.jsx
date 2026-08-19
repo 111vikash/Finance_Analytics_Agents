@@ -1,4 +1,4 @@
-import Card from "@/components/ui/Card";
+import {Card} from "@/components/common/Card";
 
 export default function SettingsPage() {
   return (

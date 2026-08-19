@@ -1,5 +1,5 @@
-import Card from "@/components/ui/Card";
-import { roleCards } from "@/data/mockData";
+import {Card} from "@/components/common/Card";
+// import { roleCards } from "@/data/mockData";
 
 export default function UsersRolePage() {
   return (
@@ -10,12 +10,12 @@ export default function UsersRolePage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {roleCards.map((item) => (
+        {/* {roleCards.map((item) => (
           <Card key={item.role} className="p-5">
             <p className="text-base font-semibold text-slate-900">{item.role}</p>
             <p className="mt-2 text-sm text-slate-500">{item.access}</p>
           </Card>
-        ))}
+        ))} */}
       </div>
     </div>
   );
