@@ -290,7 +290,7 @@ export default function VendorPage() {
         <div className="grid grid-cols-12 gap-4">
 
           {/* TIMELINE */}
-          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
+          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-6">
             <div className="flex justify-between mb-5">
               <h2 className="text-sm font-bold text-slate-800">
                 Follow-up Timeline
@@ -344,7 +344,7 @@ export default function VendorPage() {
           </div>
 
           {/* TEMPLATES */}
-          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-5">
+          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-6">
             <div className="flex justify-between mb-5">
               <h2 className="text-sm font-bold text-slate-800">
                 Communication Templates
@@ -392,8 +392,12 @@ export default function VendorPage() {
             </button>
           </div>
 
-          {/* SLA */}
-          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-3">
+          
+        </div>
+
+        <div className="grid grid-cols-12 gap-4">
+           {/* SLA */}
+          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
             <div className="flex justify-between">
               <h2 className="text-sm font-bold text-slate-800">
                 SLA Monitoring
@@ -440,8 +444,11 @@ export default function VendorPage() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
+            
 
-            <div className="mt-2 border-t border-slate-200 pt-2">
+            <div className="mt-2 pt-2">
               <h4 className="mb-2 text-xs font-semibold text-slate-700">
                 Response Tracking
               </h4>
@@ -470,8 +477,10 @@ export default function VendorPage() {
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="mt-2 flex items-center justify-between gap-3 border-t border-slate-200 pt-2">
+          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
+            <div className="mt-2 flex items-center justify-between gap-3 pt-2">
               <div>
                 <div className="text-xs font-semibold text-slate-700">Vendor Communication Score</div>
                 <div className="mt-0.5 text-[9px] text-slate-500">Based on last 6 months performance</div>
@@ -484,11 +493,12 @@ export default function VendorPage() {
             </div>
 
           </div>
+          
         </div>
 
         {/* OPEN REQUESTS */}
         <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-12 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-8">
+        <div className="col-span-12 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-12">
           <div className="flex items-center justify-between border-b border-slate-200 p-3 px-4">
             <h2 className="text-sm font-bold text-slate-800">
               Open Requests
@@ -534,38 +544,11 @@ export default function VendorPage() {
             </table>
           </div>
         </div>
-
-        <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-bold text-slate-800">Follow-up Timeline</h2>
-            <button className="text-[9px] font-semibold text-blue-600 hover:text-blue-800">View Calendar</button>
-          </div>
-          <div className="relative space-y-3">
-            <div className="absolute bottom-2 left-[31px] top-2 w-px bg-slate-200" />
-            {compactTimeline.map((item) => (
-              <div key={item.title} className="relative z-10 grid grid-cols-[30px_10px_1fr_auto] items-center gap-2">
-                <div className="text-center leading-none">
-                  <div className={`text-[10px] font-bold ${item.state === "active" ? "text-orange-500" : "text-slate-600"}`}>{item.day}</div>
-                  <div className="text-[8px] text-slate-400">{item.month}</div>
-                </div>
-                <div className={`h-2.5 w-2.5 rounded-full border-2 border-white shadow-sm ${item.state === "done" ? "bg-emerald-500" : item.state === "active" ? "bg-orange-500" : "bg-slate-300"}`} />
-                <div className={`text-[10px] font-semibold ${item.state === "active" ? "text-slate-800" : "text-slate-600"}`}>{item.title}</div>
-                <div className="flex items-center gap-1 text-[9px] text-slate-400">
-                  {item.time}
-                  {item.state === "done" && <Check size={12} className="text-emerald-500" />}
-                  {item.state === "active" && <Clock3 size={12} className="text-orange-500" />}
-                  {item.state === "pending" && <Clock3 size={12} className="text-slate-400" />}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
         </div>
 
         {/* BOTTOM */}
         <div className="grid grid-cols-12 gap-4">
-
-          <div className="col-span-12 overflow-hidden rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-7">
+          <div className="col-span-12 overflow-hidden rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-12">
             <div className="mb-3 flex justify-between">
               <h2 className="text-sm font-bold text-slate-800">
                 Recent Communications
@@ -601,8 +584,36 @@ export default function VendorPage() {
               </tbody>
             </table>
           </div>
+        </div>
 
-          <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-2">
+        <div className="grid grid-cols-12 gap-4">
+
+          <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-5">
+                    <div className="mb-3 flex items-center justify-between">
+                      <h2 className="text-sm font-bold text-slate-800">Follow-up Timeline</h2>
+                      <button className="text-[9px] font-semibold text-blue-600 hover:text-blue-800">View Calendar</button>
+                    </div>
+                    <div className="relative space-y-3">
+                      <div className="absolute bottom-2 left-[31px] top-2 w-px bg-slate-200" />
+                      {compactTimeline.map((item) => (
+                        <div key={item.title} className="relative z-10 grid grid-cols-[30px_10px_1fr_auto] items-center gap-2">
+                          <div className="text-center leading-none">
+                            <div className={`text-[10px] font-bold ${item.state === "active" ? "text-orange-500" : "text-slate-600"}`}>{item.day}</div>
+                            <div className="text-[8px] text-slate-400">{item.month}</div>
+                          </div>
+                          <div className={`h-2.5 w-2.5 rounded-full border-2 border-white shadow-sm ${item.state === "done" ? "bg-emerald-500" : item.state === "active" ? "bg-orange-500" : "bg-slate-300"}`} />
+                          <div className={`text-[10px] font-semibold ${item.state === "active" ? "text-slate-800" : "text-slate-600"}`}>{item.title}</div>
+                          <div className="flex items-center gap-1 text-[9px] text-slate-400">
+                            {item.time}
+                            {item.state === "done" && <Check size={12} className="text-emerald-500" />}
+                            {item.state === "active" && <Clock3 size={12} className="text-orange-500" />}
+                            {item.state === "pending" && <Clock3 size={12} className="text-slate-400" />}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+          </div>
+           <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-3">
             <h2 className="mb-3 text-sm font-bold text-slate-800">
               Quick Actions
             </h2>
@@ -626,7 +637,7 @@ export default function VendorPage() {
               </button>
             </div>
           </div>
-          <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-3">
+          <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
             <h2 className="mb-3 text-sm font-bold text-slate-800">
               Notes
             </h2>
