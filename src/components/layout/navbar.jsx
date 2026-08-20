@@ -22,10 +22,10 @@ const navItems = [
   { name: "Exceptions", href: "/exceptions", icon: AlertTriangle },
   { name: "Approvals", href: "/approvals", icon: ShieldCheck },
   { name: "Communications", href: "/vendors", icon: MessageSquareMore },
-  { name: "Reports & Analytics", href: "/reports", icon: BarChart3 },
+  // { name: "Reports & Analytics", href: "/reports", icon: BarChart3 },
   { name: "Audit & Compliance", href: "/audit", icon: ShieldCheck },
   { name: "Configuration", href: "/settings", icon: Settings },
-  { name: "Users & Roles", href: "/users-roles", icon: Users },
+  // { name: "Users & Roles", href: "/users-roles", icon: Users },
 ];
 
 export default function Navbar({ isSidebarOpen }) {
