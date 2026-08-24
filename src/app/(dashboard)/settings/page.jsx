@@ -277,14 +277,21 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
       <div className="mx-auto max-w-7xl">
         {/* Configuration Audit Log (single row on top) */}
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight ">
+                Configuration
+              </h1>
+          </div>
+          <div>
           <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-2 rounded border border-slate-200 bg-white px-3 py-2 shadow-sm">
             Configuration Audit Log <ChevronRight className="w-3 h-3 text-blue-600" />
           </a>
+          </div>
         </div>
 
         {/* KPI row */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 mb-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-6">
           {kpiData.map((kpi, idx) => (
             <div
               key={idx}
@@ -300,7 +307,6 @@ export default function SettingsPage() {
               "
             >
               <div className="flex items-center gap-4">
-
                 {/* Icon */}
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-full ${kpi.bg}`}
@@ -310,23 +316,17 @@ export default function SettingsPage() {
 
                 {/* Content */}
                 <div className="min-w-0 flex-1">
-
                   <p className="text-[13px] font-semibold text-slate-700 leading-5">
                     {kpi.label}
                   </p>
 
-                  <div
-                    className={`mt-1 text-2xl font-bold ${kpi.valueColor}`}
-                  >
+                  <div className={`mt-1 text-2xl font-bold ${kpi.valueColor}`}>
                     {kpi.value}
                   </div>
 
-                  <p
-                    className={`mt-1 text-xs font-semibold ${kpi.changeColor}`}
-                  >
+                  <p className={`mt-1 text-xs font-semibold ${kpi.changeColor}`}>
                     {kpi.change}
                   </p>
-
                 </div>
               </div>
             </div>
