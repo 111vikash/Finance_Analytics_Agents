@@ -1,50 +1,6 @@
-// "use client";
-
-
-// import React from 'react';
-
-// export default function DashboardPage() {
-//     return (
-//         // https://app.powerbi.com/reportEmbed?reportId=1e804c5a-5777-41e4-b303-f6caf5e6db0c&autoAuth=true&ctid=c6823a59-1301-40c3-9d06-8685d8d732d8&actionBarEnabled=true&reportCopilotInEmbed=true%22
-//         // https://app.powerbi.com/reportEmbed?reportId=5485da49-f278-4e93-b904-b733d7407a15&autoAuth=true&ctid=76a2ae5a-9f00-4f6b-95ed-5d33d77c4d61&actionBarEnabled=true%22
-//         <div className="space-y-6">
-//             <iframe
-//                 title="RFQ Automation"
-//                 className="w-full rounded-lg h-screen"
-//                 src="https://app.powerbi.com/reportEmbed?reportId=1e804c5a-5777-41e4-b303-f6caf5e6db0c&autoAuth=true&ctid=c6823a59-1301-40c3-9d06-8685d8d732d8&actionBarEnabled=true&reportCopilotInEmbed=true%22"
-//                 frameBorder="0" allowFullScreen={true}></iframe>
-
-
-//         </div >
-//     );
-// }
-
-// "use client";
-
-
-// import React from 'react';
-
-// export default function DashboardPage() {
-//     return (
-//         // https://app.powerbi.com/reportEmbed?reportId=1e804c5a-5777-41e4-b303-f6caf5e6db0c&autoAuth=true&ctid=c6823a59-1301-40c3-9d06-8685d8d732d8&actionBarEnabled=true&reportCopilotInEmbed=true%22
-//         // https://app.powerbi.com/reportEmbed?reportId=5485da49-f278-4e93-b904-b733d7407a15&autoAuth=true&ctid=76a2ae5a-9f00-4f6b-95ed-5d33d77c4d61&actionBarEnabled=true%22
-//         <div className="space-y-6">
-//             <iframe
-//                 title="RFQ Automation"
-//                 className="w-full rounded-lg h-screen"
-//                 src="https://app.powerbi.com/reportEmbed?reportId=1e804c5a-5777-41e4-b303-f6caf5e6db0c&autoAuth=true&ctid=c6823a59-1301-40c3-9d06-8685d8d732d8&actionBarEnabled=true&reportCopilotInEmbed=true%22"
-//                 frameBorder="0" allowFullScreen={true}></iframe>
-
-
-//         </div >
-//     );
-// }
-
-
 "use client";
 
 import { useState } from "react";
-
 import {
   AlertTriangle,
   ArrowRight,
@@ -62,7 +18,7 @@ import {
   ChevronDown,
   Clock3,
 } from "lucide-react";
-
+import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 export default function VendorPage() {
   const [vendorMenuOpen, setVendorMenuOpen] = useState(false);
   const [actionsMenuOpen, setActionsMenuOpen] = useState(false);
@@ -398,56 +354,101 @@ export default function VendorPage() {
         <div className="grid grid-cols-12 gap-4">
            {/* SLA */}
           <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
-            <div className="flex justify-between">
-              <h2 className="text-sm font-bold text-slate-800">
-                SLA Monitoring
-              </h2>
+  <div className="mb-4 flex items-center justify-between">
+    <h3 className="text-sm font-bold text-slate-800">
+      SLA Compliance
+    </h3>
 
-              <button className="text-[10px] font-semibold text-blue-600 hover:text-blue-800">
-                View SLA Policy
-              </button>
-            </div>
+    <select className="cursor-pointer bg-transparent text-xs font-medium text-slate-500 outline-none">
+      <option>May 2025</option>
+    </select>
+  </div>
 
-            <div className="my-3 grid grid-cols-[116px_minmax(0,1fr)] items-center gap-2 border-b border-slate-100 pb-3">
-              <div className="relative h-[104px] w-[104px] shrink-0">
-                <svg className="h-full w-full -rotate-90" viewBox="0 0 110 110" aria-label="2 days remaining">
-                  <circle cx="55" cy="55" r="42" fill="none" stroke="#e2e8f0" strokeWidth="9" />
-                  <circle cx="55" cy="55" r="42" fill="none" stroke="#f59e0b" strokeWidth="9" strokeLinecap="round" strokeDasharray="190 264" />
-                </svg>
+  <div className="flex items-center gap-6">
+    <div className="relative h-[150px] w-[150px] shrink-0">
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-2xl font-bold text-slate-900">
+          95.6%
+        </span>
 
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="mt-2 text-2xl font-bold text-orange-500">
-                    2
-                  </span>
+        <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-600">
+          Compliant
+        </span>
+      </div>
 
-                  <span className="max-w-[48px] break-words text-center text-[9px] leading-3 text-slate-600">
-                    Days<br />Remaining
-                  </span>
-                </div>
-              </div>
-              <div className="min-w-0 space-y-1.5 text-[9px] font-medium text-slate-600">
-                <div className="grid grid-cols-[1fr_auto] items-center gap-2">
-                  <span>SLA Due Date</span>
-                  <span className="font-bold text-slate-800">16 May 2026</span>
-                </div>
-                <div className="grid grid-cols-[1fr_auto] items-center gap-2">
-                  <span>Response Due In</span>
-                  <span className="font-bold text-slate-800">2 Days</span>
-                </div>
-                <div className="grid grid-cols-[1fr_auto] items-center gap-2">
-                  <span>SLA Status</span>
-                  <span className="rounded bg-red-50 px-1.5 py-1 font-bold text-red-500">At Risk</span>
-                </div>
-                <div className="grid grid-cols-[1fr_auto] items-center gap-2">
-                  <span>Escalation Level</span>
-                  <span className="rounded bg-red-50 px-1.5 py-1 font-bold text-red-500">1 Active</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={[
+              { name: "Compliant", value: 95.6, count: 1176 },
+              { name: "At Risk", value: 3.2, count: 40 },
+              { name: "Breached", value: 1.2, count: 15 },
+            ]}
+            dataKey="value"
+            cx="50%"
+            cy="50%"
+            innerRadius={54}
+            outerRadius={68}
+            startAngle={90}
+            endAngle={-270}
+          >
+            <Cell fill="#22c55e" stroke="none" />
+            <Cell fill="#f97316" stroke="none" />
+            <Cell fill="#ef4444" stroke="none" />
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+
+    <div className="flex flex-1 flex-col gap-3 text-xs">
+      <div className="flex items-center justify-between font-medium">
+        <div className="flex items-center gap-2">
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ backgroundColor: "#22c55e" }}
+          />
+          <span className="text-slate-500">Compliant</span>
+        </div>
+
+        <span className="text-slate-800">
+          95.6%{" "}
+          <span className="font-normal text-slate-400">(1176)</span>
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between font-medium">
+        <div className="flex items-center gap-2">
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ backgroundColor: "#f97316" }}
+          />
+          <span className="text-slate-500">At Risk</span>
+        </div>
+
+        <span className="text-slate-800">
+          3.2%{" "}
+          <span className="font-normal text-slate-400">(40)</span>
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between font-medium">
+        <div className="flex items-center gap-2">
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ backgroundColor: "#ef4444" }}
+          />
+          <span className="text-slate-500">Breached</span>
+        </div>
+
+        <span className="text-slate-800">
+          1.2%{" "}
+          <span className="font-normal text-slate-400">(15)</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
           <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
-            
-
             <div className="mt-2 pt-2">
               <h4 className="mb-2 text-xs font-semibold text-slate-700">
                 Response Tracking
