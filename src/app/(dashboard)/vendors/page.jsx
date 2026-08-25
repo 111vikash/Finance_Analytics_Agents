@@ -17,7 +17,12 @@ import {
   Upload,
   ChevronDown,
   Clock3,
+  Building2,
+  AlertCircle,
+  MessageSquare,
+
 } from "lucide-react";
+import KpiCard from "../../../components/dashboard/KpiCard";
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 export default function VendorPage() {
   const [vendorMenuOpen, setVendorMenuOpen] = useState(false);
@@ -159,154 +164,224 @@ export default function VendorPage() {
       <div className="mx-auto max-w-[1800px] space-y-3">
 
         {/* HEADER ACTIONS */}
-        <div className="flex justify-end gap-2">
-          <div className="relative">
-            <button
-              onClick={() => { setVendorMenuOpen(!vendorMenuOpen); setActionsMenuOpen(false); }}
-              className="inline-flex items-center gap-1 rounded border border-slate-200 bg-white px-3 py-2 text-[10px] font-semibold text-slate-600 shadow-sm transition hover:border-blue-300 hover:text-blue-600"
-            >
-              Change Vendor <ChevronDown size={12} />
-            </button>
-            {vendorMenuOpen && (
-              <div className="absolute right-0 z-30 mt-1 w-44 rounded border border-slate-200 bg-white p-1 shadow-lg">
-                {["ABC Manufacturing Ltd.", "Global Industrial Supply", "Northstar Components"].map((vendor) => (
-                  <button key={vendor} onClick={() => setVendorMenuOpen(false)} className="block w-full rounded px-3 py-2 text-left text-[10px] text-slate-600 hover:bg-blue-50 hover:text-blue-700">
-                    {vendor}
-                  </button>
-                ))}
-              </div>
-            )}
+        <div className="flex items-center justify-between gap-2">
+          {/* Left Side Heading */}
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Communications
+            </h1>
           </div>
-          <div className="relative">
-            <button
-              onClick={() => { setActionsMenuOpen(!actionsMenuOpen); setVendorMenuOpen(false); }}
-              className="inline-flex items-center gap-1 rounded bg-[#0969c8] px-3 py-2 text-[10px] font-semibold text-white shadow-sm transition hover:bg-[#0759aa]"
-            >
-              Actions <ChevronDown size={12} />
-            </button>
-            {actionsMenuOpen && (
-              <div className="absolute right-0 z-30 mt-1 w-40 rounded border border-slate-200 bg-white p-1 shadow-lg">
-                {["Send Statement Request", "Export Vendor View", "Mark for Review"].map((action) => (
-                  <button key={action} onClick={() => setActionsMenuOpen(false)} className="block w-full rounded px-3 py-2 text-left text-[10px] text-slate-600 hover:bg-blue-50 hover:text-blue-700">
-                    {action}
-                  </button>
-                ))}
-              </div>
-            )}
+
+          {/* Right Side Buttons */}
+          <div className="flex items-center gap-2">
+            
+            {/* Change Vendor */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setVendorMenuOpen(!vendorMenuOpen);
+                  setActionsMenuOpen(false);
+                }}
+                className="inline-flex cursor-pointer items-center gap-1 rounded border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-blue-300 hover:text-blue-600"
+              >
+                Change Vendor
+                <ChevronDown size={12} />
+              </button>
+
+              {vendorMenuOpen && (
+                <div className="absolute right-0 z-30 mt-1 w-44 rounded border border-slate-200 bg-white p-1 shadow-lg">
+                  {[
+                    "ABC Manufacturing Ltd.",
+                    "Global Industrial Supply",
+                    "Northstar Components",
+                  ].map((vendor) => (
+                    <button
+                      key={vendor}
+                      onClick={() => setVendorMenuOpen(false)}
+                      className="block w-full cursor-pointer rounded px-3 py-2 text-left text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-700"
+                    >
+                      {vendor}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setActionsMenuOpen(!actionsMenuOpen);
+                  setVendorMenuOpen(false);
+                }}
+                className="inline-flex cursor-pointer items-center gap-1 rounded bg-[#0969c8] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0759aa]"
+              >
+                Actions
+                <ChevronDown size={12} />
+              </button>
+
+              {actionsMenuOpen && (
+                <div className="absolute right-0 z-30 mt-1 w-40 rounded border border-slate-200 bg-white p-1 shadow-lg">
+                  {[
+                    "Send Statement Request",
+                    "Export Vendor View",
+                    "Mark for Review",
+                  ].map((action) => (
+                    <button
+                      key={action}
+                      onClick={() => setActionsMenuOpen(false)}
+                      className="block w-full cursor-pointer rounded px-3 py-2 text-left text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-700"
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
 
         {/* SIX HEADER CARDS */}
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          <div className="min-h-[92px] rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
-            <div className="flex gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#7b54cf] text-xs font-bold text-white shadow-sm">AM</div>
-              <div className="min-w-0">
-                <h1 className="truncate text-sm font-bold text-slate-800">ABC Manufacturing Ltd.</h1>
-                <p className="text-[9px] text-slate-500">Vendor ID: VND-100234</p>
-                <div className="mt-2 flex gap-3 text-slate-400">
-                  <Mail size={12} /><Phone size={12} /><MapPin size={12} />
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <KpiCard
+            label="Vendor"
+            value="ABC Manufacturing Ltd."
+            change="Vendor ID: VND-100234"
+            isTrendPositive={true}
+            icon={Building2}
+            iconColor="text-violet-600"
+            iconBgColor="bg-violet-100"
+          />
 
-          <div className="min-h-[92px] rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
-            <div className="text-[10px] font-medium text-slate-500">Statement Period</div>
-            <div className="mt-2 flex items-center gap-2 text-xs font-bold text-slate-800"><CalendarDays size={15} className="text-blue-500" /> Jul 2026</div>
-            <div className="mt-2 text-[9px] text-slate-500">01 Jul 2026 – 31 Jul 2026</div>
-          </div>
+          <KpiCard
+            label="Statement Period"
+            value="Jul 2026"
+            change="01 Jul 2026 - 31 Jul 2026"
+            isTrendPositive={true}
+            icon={CalendarDays}
+            iconColor="text-blue-600"
+            iconBgColor="bg-blue-100"
+          />
 
-          <div className="min-h-[92px] rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
-            <div className="text-[10px] font-medium text-slate-500">Reconciliation Status</div>
-            <div className="mt-2 inline-flex rounded bg-blue-50 px-2 py-1 text-[9px] font-bold text-blue-700">In Progress</div>
-            <div className="mt-2 flex items-center gap-2"><span className="text-[9px] text-slate-500">65% Completed</span><div className="h-1.5 flex-1 rounded-full bg-slate-200"><div className="h-1.5 w-[65%] rounded-full bg-[#2d83cf]" /></div></div>
-          </div>
+          <KpiCard
+            label="Reconciliation Status"
+            value="65% Completed"
+            change="In Progress"
+            isTrendPositive={true}
+            icon={Clock3}
+            iconColor="text-cyan-600"
+            iconBgColor="bg-cyan-100"
+          />
 
-          <div className="min-h-[92px] rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
-            <div className="text-[10px] font-medium text-slate-500">SLA Status</div>
-            <div className="mt-2 flex items-center gap-1 text-xs font-bold text-orange-600"><AlertTriangle size={14} /> At Risk</div>
-            <div className="mt-2 text-[9px] text-slate-500">Response due in <span className="font-semibold text-orange-600">2 days</span></div>
-          </div>
+          <KpiCard
+            label="SLA Status"
+            value="At Risk"
+            change="Response due in 2 days"
+            isTrendPositive={false}
+            icon={AlertTriangle}
+            iconColor="text-orange-600"
+            iconBgColor="bg-orange-100"
+          />
 
-          <div className="min-h-[92px] rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
-            <div className="text-[10px] font-medium text-slate-500">Outstanding Exceptions</div>
-            <div className="mt-2 text-xl font-bold text-red-500">8</div>
-            <div className="text-[9px] text-slate-500">Total Value: $126,540.00</div>
-          </div>
+          <KpiCard
+            label="Outstanding Exceptions"
+            value="8"
+            change="Value: $126,540.00"
+            isTrendPositive={false}
+            icon={AlertCircle}
+            iconColor="text-red-600"
+            iconBgColor="bg-red-100"
+          />
 
-          <div className="min-h-[92px] rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
-            <div className="text-[10px] font-medium text-slate-500">Last Communication</div>
-            <div className="mt-2 text-xs font-bold text-slate-800">12 May 2026, 10:30 AM</div>
-            <div className="mt-2 text-[9px] text-slate-500">Email sent to vendor</div>
-          </div>
+          <KpiCard
+            label="Last Communication"
+            value="12 May 2026"
+            change="10:30 AM • Email Sent"
+            isTrendPositive={true}
+            icon={MessageSquare}
+            iconColor="text-emerald-600"
+            iconBgColor="bg-emerald-100"
+          />
         </div>
 
         {/* TOP GRID */}
         <div className="grid grid-cols-12 gap-4">
 
           {/* TIMELINE */}
-          <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-6">
-            <div className="flex justify-between mb-5">
-              <h2 className="text-sm font-bold text-slate-800">
-                Follow-up Timeline
-              </h2>
+<div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-6">
+  <div className="mb-5 flex justify-between">
+    <h2 className="text-sm font-semibold text-slate-900">
+      Follow-up Timeline
+    </h2>
 
-              <button className="text-[10px] font-semibold text-blue-600 hover:text-blue-800">
-                View All History
-              </button>
-            </div>
+    <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">
+      View All History
+    </button>
+  </div>
 
-            <div className="space-y-4">
+  <div className="space-y-4">
+    {timeline.map((item, index) => (
+      <div
+        key={index}
+        className="relative grid grid-cols-[32px_minmax(0,1fr)_95px_90px] items-start gap-2"
+      >
+        {index !== timeline.length - 1 && (
+          <div className="absolute left-4 top-8 h-14 w-px bg-slate-200" />
+        )}
 
-              {timeline.map((item, index) => (
-                <div key={index} className="relative grid grid-cols-[32px_minmax(0,1fr)_58px_70px] items-start gap-1">
+        {/* Icon */}
+        <div
+          className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${item.color} text-white shadow-sm`}
+        >
+          <CheckCircle size={14} />
+        </div>
 
-                  {index !== timeline.length - 1 && (
-                    <div className="absolute left-4 top-8 h-14 w-px bg-slate-200" />
-                  )}
+        {/* Content */}
+        <div className="min-w-0">
+          <h4 className="break-words text-xs font-semibold leading-4 text-slate-700">
+            {item.title}
+          </h4>
 
-                  <div
-                    className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${item.color} text-white shadow-sm`}
-                  >
-                    <CheckCircle size={14} />
-                  </div>
+          <p className="mt-1 break-words text-xs leading-4 text-slate-500">
+            {item.desc}
+          </p>
+        </div>
 
-                  <div className="min-w-0">
-                    <h4 className="break-words text-[10px] font-semibold leading-3 text-slate-700">
-                      {item.title}
-                    </h4>
+        {/* Status Badge - Left Shifted & Full Width */}
+        <div className="-ml-6 flex justify-start">
+          <span
+            className={`inline-flex min-w-[88px] items-center justify-center rounded px-2 py-1 text-xs font-semibold ${statusBadge(
+              item.status
+            )}`}
+          >
+            {item.status}
+          </span>
+        </div>
 
-                    <p className="mt-1 break-words text-[9px] leading-3 text-slate-500">
-                      {item.desc}
-                    </p>
-                  </div>
-
-                  <span
-                    className={`relative -left-5 mt-1 w-fit max-w-full break-words rounded px-1 py-1 text-center text-[8px] font-semibold leading-3 ${statusBadge(
-                      item.status
-                    )}`}
-                  >
-                    {item.status}
-                  </span>
-
-                  <div className="min-w-0 text-right">
-                    <div className="break-words text-[9px] font-medium leading-3 text-slate-500">{item.date}</div>
-                    <div className="break-words text-[8px] leading-3 text-slate-400">{item.time}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Date & Time */}
+        <div className="text-right">
+          <div className="text-xs font-medium leading-4 text-slate-500">
+            {item.date}
           </div>
+
+          <div className="mt-1 text-xs leading-4 text-slate-400">
+            {item.time}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
 
           {/* TEMPLATES */}
           <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-6">
             <div className="flex justify-between mb-5">
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm font-semibold text-slate-900">
                 Communication Templates
               </h2>
 
-              <button className="text-[10px] font-semibold text-blue-600 hover:text-blue-800">
+              <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">
                 Manage Templates
               </button>
             </div>
@@ -328,7 +403,7 @@ export default function VendorPage() {
                         {title}
                       </div>
 
-                      <div className="text-[10px] text-slate-500">
+                      <div className="text-xs  text-slate-600">
                         {desc}
                       </div>
                     </div>
@@ -336,14 +411,14 @@ export default function VendorPage() {
 
                   <button
                     onClick={() => setSelectedTemplate(title)}
-                    className={`shrink-0 rounded border px-2 py-1 text-[9px] font-semibold ${selectedTemplate === title ? "border-emerald-200 bg-emerald-50 text-emerald-600" : "border-blue-100 bg-blue-50 text-blue-600 hover:bg-blue-100"}`}
+                    className={`shrink-0 rounded border px-2 py-1 text-xs  font-semibold ${selectedTemplate === title ? "border-emerald-200 bg-emerald-50 text-emerald-600" : "border-blue-100 bg-blue-50 text-blue-600 hover:bg-blue-100"}`}
                   >
                     {selectedTemplate === title ? "Selected" : "Use Template"}
                   </button>
                 </div>
               ))}
             </div>
-            <button className="mt-3 flex w-full items-center justify-between border-t border-slate-200 pt-3 text-[10px] font-semibold text-blue-600 hover:text-blue-800">
+            <button className="mt-3 flex w-full items-center justify-between border-t border-slate-200 pt-3 text-xs font-semibold text-blue-600 hover:text-blue-800">
               View All Templates <ArrowRight size={13} />
             </button>
           </div>
@@ -354,140 +429,182 @@ export default function VendorPage() {
         <div className="grid grid-cols-12 gap-4">
            {/* SLA */}
           <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
-  <div className="mb-4 flex items-center justify-between">
-    <h3 className="text-sm font-bold text-slate-800">
-      SLA Compliance
-    </h3>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-slate-900">
+            SLA Compliance
+          </h3>
 
-    <select className="cursor-pointer bg-transparent text-xs font-medium text-slate-500 outline-none">
-      <option>May 2025</option>
-    </select>
-  </div>
-
-  <div className="flex items-center gap-6">
-    <div className="relative h-[150px] w-[150px] shrink-0">
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold text-slate-900">
-          95.6%
-        </span>
-
-        <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-600">
-          Compliant
-        </span>
-      </div>
-
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={[
-              { name: "Compliant", value: 95.6, count: 1176 },
-              { name: "At Risk", value: 3.2, count: 40 },
-              { name: "Breached", value: 1.2, count: 15 },
-            ]}
-            dataKey="value"
-            cx="50%"
-            cy="50%"
-            innerRadius={54}
-            outerRadius={68}
-            startAngle={90}
-            endAngle={-270}
-          >
-            <Cell fill="#22c55e" stroke="none" />
-            <Cell fill="#f97316" stroke="none" />
-            <Cell fill="#ef4444" stroke="none" />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
-
-    <div className="flex flex-1 flex-col gap-3 text-xs">
-      <div className="flex items-center justify-between font-medium">
-        <div className="flex items-center gap-2">
-          <span
-            className="h-2 w-2 rounded-full"
-            style={{ backgroundColor: "#22c55e" }}
-          />
-          <span className="text-slate-500">Compliant</span>
+          <select className="cursor-pointer bg-transparent text-xs  font-medium text-slate-600 outline-none">
+            <option>May 2025</option>
+          </select>
         </div>
 
-        <span className="text-slate-800">
-          95.6%{" "}
-          <span className="font-normal text-slate-400">(1176)</span>
-        </span>
-      </div>
+            <div className="flex items-center gap-6">
+              <div className="relative h-[150px] w-[150px] shrink-0">
+                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-2xl font-bold text-slate-900">
+                    95.6%
+                  </span>
 
-      <div className="flex items-center justify-between font-medium">
-        <div className="flex items-center gap-2">
-          <span
-            className="h-2 w-2 rounded-full"
-            style={{ backgroundColor: "#f97316" }}
-          />
-          <span className="text-slate-500">At Risk</span>
-        </div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-600">
+                    Compliant
+                  </span>
+                </div>
 
-        <span className="text-slate-800">
-          3.2%{" "}
-          <span className="font-normal text-slate-400">(40)</span>
-        </span>
-      </div>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: "Compliant", value: 95.6, count: 1176 },
+                        { name: "At Risk", value: 3.2, count: 40 },
+                        { name: "Breached", value: 1.2, count: 15 },
+                      ]}
+                      dataKey="value"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={54}
+                      outerRadius={68}
+                      startAngle={90}
+                      endAngle={-270}
+                    >
+                      <Cell fill="#22c55e" stroke="none" />
+                      <Cell fill="#f97316" stroke="none" />
+                      <Cell fill="#ef4444" stroke="none" />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
 
-      <div className="flex items-center justify-between font-medium">
-        <div className="flex items-center gap-2">
-          <span
-            className="h-2 w-2 rounded-full"
-            style={{ backgroundColor: "#ef4444" }}
-          />
-          <span className="text-slate-500">Breached</span>
-        </div>
+              <div className="flex flex-1 flex-col gap-3 text-xs ">
+                <div className="flex items-center justify-between font-medium">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: "#22c55e" }}
+                    />
+                    <span className="text-slate-500">Compliant</span>
+                  </div>
 
-        <span className="text-slate-800">
-          1.2%{" "}
-          <span className="font-normal text-slate-400">(15)</span>
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
+                  <span className="text-slate-800">
+                    95.6%{" "}
+                    <span className="font-normal text-slate-400">(1176)</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between font-medium">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: "#f97316" }}
+                    />
+                    <span className="text-slate-500">At Risk</span>
+                  </div>
+
+                  <span className="text-slate-800">
+                    3.2%{" "}
+                    <span className="font-normal text-slate-400">(40)</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between font-medium">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: "#ef4444" }}
+                    />
+                    <span className="text-slate-500">Breached</span>
+                  </div>
+
+                  <span className="text-slate-800">
+                    1.2%{" "}
+                    <span className="font-normal text-slate-400">(15)</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
-            <div className="mt-2 pt-2">
-              <h4 className="mb-2 text-xs font-semibold text-slate-700">
+            <div>
+              <h4 className="mb-2 text-sm font-semibold text-slate-700">
                 Response Tracking
               </h4>
 
-              <div className="grid grid-cols-[116px_minmax(0,1fr)] items-center gap-2">
-                <div className="relative h-20 w-28 shrink-0">
-                  <svg className="h-full w-full" viewBox="0 0 140 90" aria-label="92 percent response rate">
-                    <path d="M 20 70 A 50 50 0 0 1 120 70" fill="none" stroke="#e2e8f0" strokeWidth="9" strokeLinecap="round" />
-                    <path d="M 20 70 A 50 50 0 0 1 120 70" fill="none" stroke="#4caf50" strokeWidth="9" strokeLinecap="round" pathLength="100" strokeDasharray="92 100" />
+              <div className="grid grid-cols-[140px_minmax(0,1fr)] items-center gap-4">
+                
+                {/* Circular Progress */}
+                <div className="relative h-32 w-32 shrink-0">
+                  <svg
+                    className="h-full w-full -rotate-90"
+                    viewBox="0 0 120 120"
+                    aria-label="92 percent response rate"
+                  >
+                    {/* Background Circle */}
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="#e2e8f0"
+                      strokeWidth="10"
+                    />
+
+                    {/* Progress Circle */}
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="#22c55e"
+                      strokeWidth="10"
+                      strokeLinecap="round"
+                      strokeDasharray={`${2 * Math.PI * 50}`}
+                      strokeDashoffset={`${
+                        2 * Math.PI * 50 * (1 - 92 / 100)
+                      }`}
+                    />
                   </svg>
 
-                  <div className="absolute inset-0 flex items-center justify-center flex-col">
-                    <span className="mt-3 text-xl font-bold leading-none text-green-600">
+                  {/* Center Content */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-2xl font-bold text-green-600">
                       92%
                     </span>
 
-                    <span className="whitespace-nowrap text-center text-[9px] leading-3 text-slate-600">
+                    <span className="text-center text-xs text-slate-600">
                       Response Rate
                     </span>
                   </div>
                 </div>
-                <div className="space-y-1 text-[9px] font-medium text-slate-600">
-                  <div className="grid grid-cols-[1fr_auto] gap-2"><span>Total Requests</span><span className="font-bold text-slate-800">24</span></div>
-                  <div className="grid grid-cols-[1fr_auto] gap-2"><span>Responded</span><span className="font-bold text-slate-800">22</span></div>
-                  <div className="grid grid-cols-[1fr_auto] gap-2"><span>Pending</span><span className="font-bold text-slate-800">2</span></div>
+
+                {/* Details */}
+                <div className="space-y-2 text-xs font-medium text-slate-600">
+                  <div className="grid grid-cols-[1fr_auto] gap-2">
+                    <span>Total Requests</span>
+                    <span className="font-bold text-slate-800">24</span>
+                  </div>
+
+                  <div className="grid grid-cols-[1fr_auto] gap-2">
+                    <span>Responded</span>
+                    <span className="font-bold text-slate-800">22</span>
+                  </div>
+
+                  <div className="grid grid-cols-[1fr_auto] gap-2">
+                    <span>Pending</span>
+                    <span className="font-bold text-slate-800">2</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="col-span-12 min-w-0 rounded-lg border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
-            <div className="mt-2 flex items-center justify-between gap-3 pt-2">
+            <div className="flex items-center justify-between gap-3">
               <div>
-                <div className="text-xs font-semibold text-slate-700">Vendor Communication Score</div>
-                <div className="mt-0.5 text-[9px] text-slate-500">Based on last 6 months performance</div>
+                <div className="text-sm font-semibold text-slate-700">Vendor Communication Score</div>
+                <div className="mt-0.5 text-xs  text-slate-600">Based on last 6 months performance</div>
               </div>
               <div className="text-right">
-                <div className="mb-1 inline-flex rounded bg-emerald-50 px-1.5 py-0.5 text-[8px] font-semibold text-emerald-600">Good</div>
+                <div className="mb-1 inline-flex rounded bg-emerald-50 px-1.5 py-0.5 text-sm  font-semibold text-emerald-600">Good</div>
                 <div className="text-base tracking-[0.18em] text-amber-400">★ ★ ★ ★ <span className="text-slate-300">☆</span>
                 </div>
               </div>
@@ -501,19 +618,19 @@ export default function VendorPage() {
         <div className="grid grid-cols-12 gap-3">
         <div className="col-span-12 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-12">
           <div className="flex items-center justify-between border-b border-slate-200 p-3 px-4">
-            <h2 className="text-sm font-bold text-slate-800">
+            <h2 className="text-sm font-semibold text-slate-900">
               Open Requests
-              <span className="ml-2 rounded bg-blue-600 px-1.5 py-0.5 text-[10px] font-bold text-white">4</span>
+              <span className="ml-2 rounded bg-blue-600 px-1.5 py-0.5 text-xs font-bold text-white">4</span>
             </h2>
 
-            <button className="text-[10px] font-semibold text-blue-600 hover:text-blue-800">
+            <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">
               View All
             </button>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[820px] text-[10px]">
-              <thead className="bg-[#f8fafc] text-[9px] uppercase tracking-wide text-slate-500">
+            <table className="w-full min-w-[820px] text-xs ">
+              <thead className="bg-[#f8fafc] text-xs  uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="px-3 py-2.5 text-left">Request ID</th>
                   <th className="px-3 py-2.5 text-left">Type</th>
@@ -534,10 +651,10 @@ export default function VendorPage() {
                     </td>
                     <td className="px-3 py-2.5">{row.type}</td>
                     <td className="px-3 py-2.5 text-slate-700">{row.subject}</td>
-                    <td className="px-3 py-2.5"><span className="rounded bg-blue-50 px-2 py-1 text-[9px] font-semibold text-blue-700">{row.status}</span></td>
+                    <td className="px-3 py-2.5"><span className="rounded bg-blue-50 px-2 py-1 text-xs  font-semibold text-blue-700">{row.status}</span></td>
                     <td className="px-3 py-2.5">{row.owner}</td>
                     <td className={`px-3 py-2.5 ${row.priority === "High" ? "font-semibold text-red-500" : ""}`}>{row.dueDate}</td>
-                    <td className="px-3 py-2.5"><span className={`rounded px-2 py-1 text-[9px] font-semibold ${row.priority === "High" ? "bg-red-50 text-red-600" : row.priority === "Medium" ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"}`}>{row.priority}</span></td>
+                    <td className="px-3 py-2.5"><span className={`rounded px-2 py-1 text-xs  font-semibold ${row.priority === "High" ? "bg-red-50 text-red-600" : row.priority === "Medium" ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"}`}>{row.priority}</span></td>
                     <td className="px-3 py-2.5">{row.daysPending}</td>
                   </tr>
                 ))}
@@ -551,16 +668,16 @@ export default function VendorPage() {
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 overflow-hidden rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-12">
             <div className="mb-3 flex justify-between">
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm font-semibold text-slate-900">
                 Recent Communications
               </h2>
-              <button className="text-[10px] font-semibold text-blue-600 hover:text-blue-800">
+              <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">
                 View All
               </button>
             </div>
 
-            <table className="w-full min-w-[680px] text-[10px]">
-              <thead className="bg-[#f8fafc] text-[9px] uppercase tracking-wide text-slate-500">
+            <table className="w-full min-w-[680px] text-xs ">
+              <thead className="bg-[#f8fafc] text-xs  uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="px-2 py-2 text-left">Date & Time</th>
                   <th className="px-2 py-2 text-left">From</th>
@@ -591,20 +708,20 @@ export default function VendorPage() {
 
           <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-5">
                     <div className="mb-3 flex items-center justify-between">
-                      <h2 className="text-sm font-bold text-slate-800">Follow-up Timeline</h2>
-                      <button className="text-[9px] font-semibold text-blue-600 hover:text-blue-800">View Calendar</button>
+                      <h2 className="text-sm font-semibold text-slate-900">Follow-up Timeline</h2>
+                      <button className="text-xs  font-semibold text-blue-600 hover:text-blue-800">View Calendar</button>
                     </div>
                     <div className="relative space-y-3">
                       <div className="absolute bottom-2 left-[31px] top-2 w-px bg-slate-200" />
                       {compactTimeline.map((item) => (
                         <div key={item.title} className="relative z-10 grid grid-cols-[30px_10px_1fr_auto] items-center gap-2">
                           <div className="text-center leading-none">
-                            <div className={`text-[10px] font-bold ${item.state === "active" ? "text-orange-500" : "text-slate-600"}`}>{item.day}</div>
-                            <div className="text-[8px] text-slate-400">{item.month}</div>
+                            <div className={`text-xs font-bold ${item.state === "active" ? "text-orange-500" : "text-slate-600"}`}>{item.day}</div>
+                            <div className="text-xs  text-slate-400">{item.month}</div>
                           </div>
                           <div className={`h-2.5 w-2.5 rounded-full border-2 border-white shadow-sm ${item.state === "done" ? "bg-emerald-500" : item.state === "active" ? "bg-orange-500" : "bg-slate-300"}`} />
-                          <div className={`text-[10px] font-semibold ${item.state === "active" ? "text-slate-800" : "text-slate-600"}`}>{item.title}</div>
-                          <div className="flex items-center gap-1 text-[9px] text-slate-400">
+                          <div className={`text-xs font-semibold ${item.state === "active" ? "text-slate-800" : "text-slate-600"}`}>{item.title}</div>
+                          <div className="flex items-center gap-1 text-xs  text-slate-400">
                             {item.time}
                             {item.state === "done" && <Check size={12} className="text-emerald-500" />}
                             {item.state === "active" && <Clock3 size={12} className="text-orange-500" />}
@@ -615,42 +732,42 @@ export default function VendorPage() {
                     </div>
           </div>
            <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-3">
-            <h2 className="mb-3 text-sm font-bold text-slate-800">
+            <h2 className="mb-3 text-sm font-semibold text-slate-900">
               Quick Actions
             </h2>
             <div className="space-y-2">
-              <button className="flex w-full items-center justify-center gap-2 rounded bg-[#0969c8] py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0759aa]">
+              <button className="flex cursor-pointer w-full items-center justify-center gap-2 rounded bg-[#0969c8] py-2 text-xs  font-semibold text-white shadow-sm transition hover:bg-[#0759aa]">
                 <Mail size={16} />
                 Send Email
               </button>
-              <button className="flex w-full items-center justify-center gap-2 rounded border border-slate-200 py-2 text-xs font-semibold text-slate-600 transition hover:border-blue-300 hover:text-blue-600">
+              <button className="flex w-full items-center justify-center gap-2 rounded border border-slate-200 py-2 text-xs  font-semibold text-slate-600 transition hover:border-blue-300 hover:text-blue-600">
                 <Phone size={16} />
                 Log Phone Call
               </button>
-              <button className="flex w-full items-center justify-center gap-2 rounded border border-slate-200 py-2 text-xs font-semibold text-slate-600 transition hover:border-blue-300 hover:text-blue-600">
+              <button className="flex w-full items-center justify-center gap-2 rounded border border-slate-200 py-2 text-xs  font-semibold text-slate-600 transition hover:border-blue-300 hover:text-blue-600">
                 <Upload size={16} />
                 Upload Document
               </button>
 
-              <button className="flex w-full items-center justify-center gap-2 rounded border border-slate-200 py-2 text-xs font-semibold text-slate-600 transition hover:border-blue-300 hover:text-blue-600">
+              <button className="flex w-full items-center justify-center gap-2 rounded border border-slate-200 py-2 text-xs  font-semibold text-slate-600 transition hover:border-blue-300 hover:text-blue-600">
                 <ArrowRight size={16} />
                 Create Follow-up Task
               </button>
             </div>
           </div>
           <div className="col-span-12 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)] xl:col-span-4">
-            <h2 className="mb-3 text-sm font-bold text-slate-800">
+            <h2 className="mb-3 text-sm font-semibold text-slate-900">
               Notes
             </h2>
             <textarea
               value={note}
               onChange={(event) => { setNote(event.target.value); setNoteSaved(false); }}
-              className="h-24 w-full resize-none rounded border border-slate-200 bg-[#fbfcfe] p-3 text-xs text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="h-24 w-full resize-none rounded border border-slate-200 bg-[#fbfcfe] p-3 text-xs  text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
               placeholder="Add your notes..."
             />
             <button
               onClick={() => setNoteSaved(true)}
-              className="mt-2 w-full rounded bg-[#0969c8] py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0759aa]"
+              className="mt-2 w-full cursor-pointer rounded bg-[#0969c8] py-2 text-xs  font-semibold text-white shadow-sm transition hover:bg-[#0759aa]"
             >
               {noteSaved ? "Note Saved" : "Save Note"}
             </button>
