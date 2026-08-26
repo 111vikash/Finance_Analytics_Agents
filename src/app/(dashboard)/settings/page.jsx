@@ -328,7 +328,7 @@ const [settings, setSettings] = useState({
 
                 {/* Content */}
                 <div className="min-w-0 flex-1">
-                  <p className="text-[13px] font-semibold text-slate-700 leading-5">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 sm:text-[11px]">
                     {kpi.label}
                   </p>
 
