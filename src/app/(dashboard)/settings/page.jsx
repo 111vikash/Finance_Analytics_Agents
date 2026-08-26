@@ -39,7 +39,7 @@ import {
   ChevronDown, 
 
 } from "lucide-react";
-
+import KpiCard from "../../../components/dashboard/KpiCard";
 export default function SettingsPage() {
   const [expandedSection, setExpandedSection] = useState("ai-config");
  const kpiData = [
@@ -220,6 +220,18 @@ export default function SettingsPage() {
     { time: "9 PM", accuracy: 93, resolution: 89 },
   ];
 
+
+
+const [confidence, setConfidence] = useState(85);
+
+const [settings, setSettings] = useState({
+  "Auto Resolution": true,
+  "Learning Mode": true,
+  "Escalation Intelligence": true,
+  "Root Cause Analysis": true,
+  "Predictive Exception Detection": true,
+});
+
   const configSections = [
     {
       id: "ai-config",
@@ -316,7 +328,7 @@ export default function SettingsPage() {
 
                 {/* Content */}
                 <div className="min-w-0 flex-1">
-                  <p className="text-[13px] font-semibold text-slate-700 leading-5">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 sm:text-[11px]">
                     {kpi.label}
                   </p>
 
@@ -353,76 +365,112 @@ export default function SettingsPage() {
 
                 {/* Body */}
                 <div className="p-4">
-                  {/* Confidence Threshold */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-slate-700">
-                        Confidence Threshold
-                      </span>
+  {/* Confidence Threshold */}
+  <div className="mb-6">
+    <div className="flex items-center justify-between">
+      <span className="text-sm font-semibold text-slate-700">
+        Confidence Threshold
+      </span>
 
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold text-slate-600">
-                          85%
-                        </span>
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-semibold text-slate-600">
+          {confidence}%
+        </span>
 
-                        <div className="relative h-1.5 w-28 rounded-full bg-slate-200">
-                          <div className="absolute left-0 top-0 h-1.5 w-[85%] rounded-full bg-blue-600" />
+        <div className="relative w-28">
+          {/* Invisible Slider */}
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={confidence}
+            onChange={(e) => setConfidence(Number(e.target.value))}
+            className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+          />
 
-                          <div className="absolute right-[15%] top-1/2 h-4 w-4 -translate-y-1/2 translate-x-1/2 rounded-full border-2 border-blue-600 bg-white shadow-sm" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+          {/* Track */}
+          <div className="h-1.5 rounded-full bg-slate-200">
+            <div
+              className="h-1.5 rounded-full bg-blue-600 transition-all"
+              style={{ width: `${confidence}%` }}
+            />
+          </div>
 
-                  {/* Settings */}
-                  <div className="space-y-4">
-                    {[
-                      {
-                        title: "Auto Resolution",
-                        desc: "Automatically resolve eligible items",
-                      },
-                      {
-                        title: "Learning Mode",
-                        desc: "Continuous learning from outcomes",
-                      },
-                      {
-                        title: "Escalation Intelligence",
-                        desc: "AI-based escalation recommendations",
-                      },
-                      {
-                        title: "Root Cause Analysis",
-                        desc: "Identify and learn from exception patterns",
-                      },
-                      {
-                        title: "Predictive Exception Detection",
-                        desc: "Detect exceptions before they occur",
-                      },
-                    ].map((item) => (
-                      <div
-                        key={item.title}
-                        className="flex items-start justify-between"
-                      >
-                        <div>
-                          <p className="text-sm font-semibold text-slate-700">
-                            {item.title}
-                          </p>
+          {/* Thumb */}
+          <div
+            className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-blue-600 bg-white shadow-sm transition-all"
+            style={{ left: `calc(${confidence}% - 8px)` }}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 
-                          <p className="text-xs text-slate-500 mt-1">
-                            {item.desc}
-                          </p>
-                        </div>
+  {/* Settings */}
+  <div className="space-y-4">
+    {[
+      {
+        title: "Auto Resolution",
+        desc: "Automatically resolve eligible items",
+      },
+      {
+        title: "Learning Mode",
+        desc: "Continuous learning from outcomes",
+      },
+      {
+        title: "Escalation Intelligence",
+        desc: "AI-based escalation recommendations",
+      },
+      {
+        title: "Root Cause Analysis",
+        desc: "Identify and learn from exception patterns",
+      },
+      {
+        title: "Predictive Exception Detection",
+        desc: "Detect exceptions before they occur",
+      },
+    ].map((item) => (
+      <div
+        key={item.title}
+        className="flex items-start justify-between"
+      >
+        <div>
+          <p className="text-sm font-semibold text-slate-700">
+            {item.title}
+          </p>
 
-                        {/* Toggle */}
-                        <button
-                          className="relative h-6 w-11 rounded-full bg-blue-600 transition"
-                          type="button"
-                        >
-                          <span className="absolute right-1 top-1 h-4 w-4 rounded-full bg-white shadow" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+          <p className="mt-1 text-xs text-slate-500">
+            {item.desc}
+          </p>
+        </div>
+
+        {/* Toggle */}
+        <button
+          type="button"
+          onClick={() =>
+            setSettings((prev) => ({
+              ...prev,
+              [item.title]: !prev[item.title],
+            }))
+          }
+          className={`relative h-6 w-11 rounded-full transition-all duration-300 ${
+            settings[item.title]
+              ? "bg-blue-600"
+              : "bg-slate-300"
+          }`}
+        >
+          <span
+            className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-all duration-300 ${
+              settings[item.title]
+                ? "right-1"
+                : "left-1"
+            }`}
+          />
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
 
                 {/* Footer */}
                 <button
@@ -601,22 +649,22 @@ export default function SettingsPage() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 p-4 pb-3">
-                  <button className="flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700">
+                  <button className="flex cursor-pointer items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700">
                     <Plus className="w-3.5 h-3.5" />
                     Add Rule
                   </button>
 
-                  <button className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">
+                  <button className="flex cursor-pointer items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">
                     <Pencil className="w-3.5 h-3.5 text-blue-600" />
                     Edit
                   </button>
 
-                  <button className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">
+                  <button className="flex cursor-pointer items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">
                     <Copy className="w-3.5 h-3.5 text-blue-600" />
                     Clone
                   </button>
 
-                  <button className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">
+                  <button className="flex cursor-pointer items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50">
                     <FlaskConical className="w-3.5 h-3.5 text-blue-600" />
                     Test Rule
                   </button>
@@ -722,7 +770,7 @@ export default function SettingsPage() {
 
                 {/* Footer */}
                 <button className="mt-auto flex w-full items-center justify-between border-t border-slate-200 px-4 py-3 text-sm font-semibold text-blue-600 hover:bg-slate-50">
-                  <span>View All Rules</span>
+                  <span className="cursor-pointer">View All Rules</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -833,7 +881,7 @@ export default function SettingsPage() {
                     hover:bg-slate-50
                   "
                 >
-                  <span>View All Exception Settings</span>
+                  <span className="cursor-pointer">View All Exception Settings</span>
 
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -940,7 +988,7 @@ export default function SettingsPage() {
 
                 {/* Footer */}
                 <button className="flex items-center justify-between border-t border-slate-200 px-5 py-4 text-blue-600 font-semibold hover:bg-slate-50">
-                  <span>View SLA Policies</span>
+                  <span className="cursor-pointer">View SLA Policies</span>
                   <ChevronRight className="h-5 w-5" />
                 </button>
 
@@ -1072,7 +1120,7 @@ export default function SettingsPage() {
                   {/* Footer */}
                   <div className="border-t border-slate-200">
                     <button className="flex w-full items-center justify-between px-4 py-3 text-sm font-semibold text-blue-600 hover:bg-slate-50">
-                      <span>Manage Workflows</span>
+                      <span className="cursor-pointer">Manage Workflows</span>
 
                       <ChevronRight className="h-4 w-4" />
                     </button>
@@ -1088,7 +1136,7 @@ export default function SettingsPage() {
                <div className="h-full rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-bold text-slate-800">Recent Changes</h3>
-                    <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800">View All</a>
+                    <a href="#" className="text-xs cursor-pointer font-semibold text-blue-600 hover:text-blue-800">View All</a>
                   </div>
 
                   <div className="space-y-3">
@@ -1153,7 +1201,7 @@ export default function SettingsPage() {
                 {/* Footer */}
                 <div className="border-t border-slate-200">
                     <button className="flex w-full items-center justify-between px-5 py-4 text-sm font-semibold text-blue-600 hover:bg-slate-50">
-                      <span>Manage All Templates</span>
+                      <span className="cursor-pointer">Manage All Templates</span>
 
                       <ChevronRight className="h-5 w-5" />
                     </button>
@@ -1278,21 +1326,15 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <div className="h-full rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+              {/* <div className="h-full rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
                 <h3 className="text-sm font-bold text-slate-800 mb-3">Quick Actions</h3>
                 <div className="space-y-2">
                   {[{ icon: "➕", label: "Create New Rule", color: "text-blue-600" },{ icon: "👥", label: "Add Vendor", color: "text-green-600" },{ icon: "⚙️", label: "Import Configuration", color: "text-purple-600" },{ icon: "📊", label: "AI Optimization Review", color: "text-orange-600" }].map((action, idx) => (
                     <button key={idx} className="w-full flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"><span className="text-base">{action.icon}</span>{action.label}</button>
                   ))}
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Row B: Integration Management | Quick Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div>
-              <div className="h-full rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.05)] flex flex-col">
+              </div> */}
+ <div className="h-full rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.05)] flex flex-col">
 
                 {/* Header */}
                 <div className="flex items-center gap-3 border-b border-slate-200 p-4">
@@ -1354,15 +1396,15 @@ export default function SettingsPage() {
                 {/* Footer */}
                 <div className="border-t border-slate-200">
                   <button className="flex w-full items-center justify-between px-5 py-4 text-sm font-semibold text-blue-600 hover:bg-slate-50">
-                    <span>Manage Integrations</span>
+                    <span className="cursor-pointer">Manage Integrations</span>
 
                     <ChevronRight className="h-5 w-5" />
                   </button>
                 </div>
 
               </div>
+
             </div>
-           
           </div>
         </div>
       </div>
