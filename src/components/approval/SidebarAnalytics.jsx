@@ -16,7 +16,7 @@ export function SidebarAnalytics() {
   useEffect(() => { setMounted(true); }, []);
 
   return (
-    <div className="w-full flex gap-6 sm:flex-wrap">
+    <div className="w-full flex gap-6">
       {/* Reconciliation Ring Analytics */}
       <div className="w-full bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
         <div className="flex justify-between items-center mb-3">
@@ -85,7 +85,7 @@ export function SidebarAnalytics() {
 
      <div className='w-full '>
        {/* Quick Action Matrix Panel */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-2 shadow-sm space-y-3">
         <h4 className="font-bold text-slate-900 text-xs">Reviewer Actions</h4>
         <div className="grid grid-cols-2 gap-2 text-xs">
           <button className="flex items-center justify-center gap-1.5 py-2.5 px-3 border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg font-semibold hover:bg-emerald-100 transition shadow-sm">
