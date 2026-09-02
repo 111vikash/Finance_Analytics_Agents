@@ -4,7 +4,8 @@ import Footer from "../../components/layout/footer";
 import Header from "../../components/layout/header";
 import Sidebar from "../../components/layout/sidebar";
 import React, { useState } from "react";
-import { useAutoLogin } from "@/hooks/useAutoLogin";
+
+import { useAutoLogin } from "@/app/hooks/useAutoLogin";
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

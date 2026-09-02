@@ -13,7 +13,7 @@ import AnalystWorkloadTable from "@/components/dashboard/AnalystWorkloadTable";
 import ReconciliationStatusOverview from "@/components/dashboard/ReconciliationStatusOverview";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/auth-store";
-import { getDashboardSummary } from "@/app/lib/api/dashboard";
+import { getDashboardSummary } from "@/app/lib/dashboard";
 
 export default function DashboardPage() {
   const sessionId = useAuthStore((state) => state.sessionId);
