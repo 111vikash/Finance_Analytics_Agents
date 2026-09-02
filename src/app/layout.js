@@ -1,28 +1,14 @@
+// src/app/layout.js
 import localFont from "next/font/local";
 import "./globals.css";
+import Providers from "./providers";
 
 const poppins = localFont({
   src: [
-    {
-      path: "../fonts/Poppins-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../fonts/Poppins-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../fonts/Poppins-SemiBold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../fonts/Poppins-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
+    { path: "../fonts/Poppins-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/Poppins-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../fonts/Poppins-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../fonts/Poppins-Bold.woff2", weight: "700", style: "normal" },
   ],
   variable: "--font-poppins",
 });
@@ -35,7 +21,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${poppins.variable} light h-full antialiased`}>
-      <body className="m-0 p-0 bg-bgdeep text-text">{children}</body>
+      <body className="m-0 p-0 bg-bgdeep text-text">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
