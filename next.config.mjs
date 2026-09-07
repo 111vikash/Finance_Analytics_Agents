@@ -1,15 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. Authorize outside host domains for images
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'i.pravatar.cc',
-        pathname: '/**', // Matches all avatar routes
-      },
-    ],
-  },
+ 
 
   // 2. Your Turbopack rules from earlier
   turbopack: {

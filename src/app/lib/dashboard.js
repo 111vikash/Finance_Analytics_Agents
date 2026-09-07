@@ -1,7 +1,9 @@
-// src/app/lib/api/dashboard.js
 import axiosInstance from "@/app/lib/api";
+import { getSessionId } from "@/app/lib/session";
 
-export const getDashboardSummary = async (sessionId) => {
+export const getDashboardSummary = async () => {
+  const sessionId = getSessionId();
+
   const [kpisRes, reconRes, supplierRes, trendRes] = await Promise.all([
     axiosInstance.get("/api/kpis", {
       headers: { "X-Session-ID": sessionId },

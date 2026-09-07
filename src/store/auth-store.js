@@ -1,4 +1,3 @@
-// src/store/auth-store.js
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -10,7 +9,7 @@ export const useAuthStore = create(
       role: null,
       setSession: (payload) =>
         set({
-          sessionId: payload.sessionId,
+          sessionId: payload.session_id,
           user: payload.user,
           role: payload.role,
         }),
