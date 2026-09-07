@@ -8,39 +8,49 @@ export default function TopVendorsTable({ data = [] }) {
         accessorKey: "vendor",
         header: "Vendor",
         cell: (info) => (
-          <span className="font-semibold text-slate-800">
-            {info.getValue()}
-          </span>
+          <span className="font-semibold text-slate-800">{info.getValue()}</span>
         ),
       },
       {
-        accessorKey: "open",
-        header: "Open",
+        accessorKey: "totalInvoices",
+        header: "Invoices",
       },
       {
-        accessorKey: "overdue",
-        header: "Overdue",
+        accessorKey: "exceptions",
+        header: "Exceptions",
         cell: (info) => (
           <span className="font-medium text-red-500">{info.getValue()}</span>
         ),
       },
       {
-        accessorKey: "days",
-        header: ">10 Days",
+        accessorKey: "highPriority",
+        header: "High Priority",
+        cell: (info) => (
+          <span className="font-medium text-orange-500">{info.getValue()}</span>
+        ),
       },
       {
-        accessorKey: "avgTime",
-        header: "Avg Days",
+        accessorKey: "avgConfidence",
+        header: "Avg Confidence",
+      },
+      {
+        accessorKey: "outstanding",
+        header: "Outstanding",
+        cell: (info) => (
+          <span className="font-semibold text-slate-700">{info.getValue()}</span>
+        ),
       },
     ],
     []
   );
 
+  const limitedData = React.useMemo(() => data.slice(0, 5), [data]);
+
   return (
     <CompactDataTable
-      title="Top 5 Vendors by Open Exceptions"
-      subtitle="Overview of vendors with the highest open exception volume."
-      data={data}
+      title="Top Vendors by Exceptions"
+      subtitle="Vendors with the highest exception volume from reconciliation."
+      data={limitedData}
       columns={columns}
       footerActionText="View All Vendors >"
     />

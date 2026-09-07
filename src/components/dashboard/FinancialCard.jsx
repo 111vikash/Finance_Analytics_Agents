@@ -1,9 +1,7 @@
 import React from "react";
 import {
-  FileSpreadsheet,
-  FolderOpen,
-  History,
-  CreditCard,
+  FileSpreadsheet, FolderOpen, History,
+  CreditCard, TrendingUp,
 } from "lucide-react";
 import KpiCard from "./KpiCard";
 
@@ -12,6 +10,7 @@ const iconMap = {
   FolderOpen,
   History,
   CreditCard,
+  TrendingUp,
 };
 
 const styleMap = {
@@ -19,33 +18,25 @@ const styleMap = {
     iconColor: "text-blue-600",
     iconBgColor: "bg-blue-100",
     cardBgColor: "bg-blue-50/70",
-    accent: {
-      border: "border-blue-100",
-    },
-  },
-  FolderOpen: {
-    iconColor: "text-sky-600",
-    iconBgColor: "bg-sky-100",
-    cardBgColor: "bg-sky-50/70",
-    accent: {
-      border: "border-sky-100",
-    },
-  },
-  History: {
-    iconColor: "text-rose-600",
-    iconBgColor: "bg-rose-100",
-    cardBgColor: "bg-rose-50/70",
-    accent: {
-      border: "border-rose-100",
-    },
+    accent: { border: "border-blue-100" },
   },
   CreditCard: {
     iconColor: "text-emerald-600",
     iconBgColor: "bg-emerald-100",
     cardBgColor: "bg-emerald-50/70",
-    accent: {
-      border: "border-emerald-100",
-    },
+    accent: { border: "border-emerald-100" },
+  },
+  FolderOpen: {
+    iconColor: "text-rose-600",
+    iconBgColor: "bg-rose-100",
+    cardBgColor: "bg-rose-50/70",
+    accent: { border: "border-rose-100" },
+  },
+  TrendingUp: {
+    iconColor: "text-amber-600",
+    iconBgColor: "bg-amber-100",
+    cardBgColor: "bg-amber-50/70",
+    accent: { border: "border-amber-100" },
   },
 };
 
@@ -56,7 +47,6 @@ export default function FinancialCard({ financialKpis = [] }) {
         {financialKpis.map((kpi, idx) => {
           const Icon = iconMap[kpi.icon] || FileSpreadsheet;
           const styles = styleMap[kpi.icon] || {};
-
           return (
             <KpiCard
               key={idx}

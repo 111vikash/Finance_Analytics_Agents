@@ -9,7 +9,7 @@ export default function AuthLayout({ children }) {
 
         {/* center side */}
         <div className="flex items-center justify-center px-4 py-10 sm:px-6 lg:px-10">
-          <div className="w-full max-w-md rounded-3xl border border-[#2a2f3a] bg-white/[0.03] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-10">
+          <div className="w-full  rounded-3xl border border-[#2a2f3a] bg-white/[0.03] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-10">
             <div className="mb-8">
 
               <p className="mb-2 text-sm uppercase tracking-[0.22em] text-amber-400">

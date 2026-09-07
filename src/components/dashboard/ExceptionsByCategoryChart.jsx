@@ -1,77 +1,54 @@
 import React from "react";
-import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
-// Matches the blue, green, purple, orange, cyan sequence seen in the visual slice
-const CATEGORY_COLORS = ["#3b82f6", "#22c55e", "#8b5cf6", "#f97316", "#06b6d4"];
-
-export default function ExceptionsByCategoryChart({
-  data = [
-    { name: "Missing Invoice", count: 85, percentage: 40 },
-    { name: "Missing Payment", count: 54, percentage: 25 },
-    { name: "Credit Note Not Reflected", count: 32, percentage: 15 },
-    { name: "Amount Mismatch", count: 24, percentage: 11 },
-    { name: "Others", count: 17, percentage: 8 },
-  ],
+export default function ReconciliationStatusOverview({
+  data = [],
+  totals = {},
 }) {
+  const rows = data.length > 0
+    ? data
+    : [{ name: "No Data", count: 0, percentage: 0, barColor: "bg-slate-300" }];
+
   return (
-    <div className="w-full rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-bold text-slate-800">Exceptions by Category</h3>
-        <select className="bg-transparent text-xs text-slate-500 font-medium outline-none cursor-pointer">
-          <option>May 2025</option>
-        </select>
-      </div>
-
-      <div className="flex items-center gap-4">
-        {/* Centralized Metric Ring */}
-        <div className="relative h-[160px] w-[160px] shrink-0">
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-3xl font-extrabold text-slate-900">213</span>
-            <span className="text-xs font-semibold text-slate-400 tracking-wide uppercase">
-              Total
-            </span>
-          </div>
-
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                dataKey="count"
-                cx="50%"
-                cy="50%"
-                innerRadius={52}
-                outerRadius={72}
-                paddingAngle={2}
-              >
-                {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
-                    stroke="none"
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+    <div className="w-full rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm flex flex-col justify-between">
+      <div>
+        <div className="mb-2 flex items-center justify-between">
+          <h3 className="text-sm font-bold text-slate-800">Reconciliation Status</h3>
+          <span className="text-xs font-medium text-slate-400">
+            {totals.suppliers || 0} suppliers
+          </span>
         </div>
 
-        {/* Legend Layout with Identical Alignment */}
-        <div className="flex flex-col gap-2.5 flex-1 min-w-0 text-xs">
-          {data.map((item, idx) => (
-            <div key={item.name} className="flex items-center justify-between font-medium">
-              <div className="flex items-center gap-2 min-w-0">
-                <span
-                  className="h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: CATEGORY_COLORS[idx % CATEGORY_COLORS.length] }}
-                />
-                <span className="text-slate-600 truncate">{item.name}</span>
+        <div className="mb-4 text-xs text-slate-500">
+          {totals.totalInvoices || 0} total invoices processed
+        </div>
+
+        <div className="flex flex-col gap-4">
+          {rows.map((item) => (
+            <div key={item.name} className="grid grid-cols-12 items-center gap-4 text-xs font-medium">
+              <div className="col-span-4 text-slate-600 truncate">{item.name}</div>
+              <div className="col-span-2 text-slate-800 font-semibold text-right">
+                {item.count.toLocaleString()}
               </div>
-              <span className="text-slate-800 ml-2 whitespace-nowrap shrink-0">
-                {item.count} <span className="text-slate-400 font-normal">({item.percentage}%)</span>
-              </span>
+              <div className="col-span-2 text-slate-400 text-right">
+                {item.percentage}%
+              </div>
+              <div className="col-span-4 pl-2">
+                <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full ${item.barColor}`}
+                    style={{ width: `${Math.min(item.percentage, 100)}%` }}
+                  />
+                </div>
+              </div>
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="mt-6 border-t border-slate-100 pt-3">
+        <button className="text-xs font-semibold text-blue-600 hover:underline">
+          View Reconciliation List &gt;
+        </button>
       </div>
     </div>
   );

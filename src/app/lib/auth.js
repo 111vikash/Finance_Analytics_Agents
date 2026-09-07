@@ -21,3 +21,5 @@ export const logoutUser = async (sessionId) => {
   );
   return res.data;
 };
+
+

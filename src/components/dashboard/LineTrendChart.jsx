@@ -15,14 +15,13 @@ const TREND_COLORS = {
   open: "#22c55e",
 };
 
-export default function LineTrendChart({
-  trendData = [],
-}) {
+export default function LineTrendChart({ trendData = [] }) {
+  // Map API data to the old chart structure
   const chartData = trendData.map((item) => ({
     name: item.name,
-    matched: item.matched,
-    exceptions: item.exceptions,
-    open: item.open,
+    matched: item.matched ?? 0,
+    exceptions: item.exceptions ?? 0,
+    open: item.open ?? 0,
   }));
 
   return (
