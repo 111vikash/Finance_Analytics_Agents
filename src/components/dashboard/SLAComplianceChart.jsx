@@ -50,7 +50,7 @@ export default function SLAComplianceChart({ progressData = [], compliancePct = 
 
         <div className="flex flex-1 flex-col gap-3 text-xs">
           {data.map((item, idx) => (
-            <div key={idx} className="flex items-center justify-between font-medium">
+            <div key={item.name} className="flex items-center justify-between font-medium">
               <div className="flex items-center gap-2">
                 <span
                   className="h-2 w-2 shrink-0 rounded-full"

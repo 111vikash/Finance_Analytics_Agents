@@ -1,54 +1,67 @@
 import React from "react";
+import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
-export default function ReconciliationStatusOverview({
-  data = [],
-  totals = {},
-}) {
-  const rows = data.length > 0
-    ? data
-    : [{ name: "No Data", count: 0, percentage: 0, barColor: "bg-slate-300" }];
+const COLORS = ["#ef4444", "#f97316", "#6366f1", "#22c55e", "#06b6d4"];
+
+export default function ExceptionsByCategoryChart({ barData = [] }) {
+  const data = barData.length > 0
+    ? barData
+    : [{ name: "No Data", value: 1 }];
+
+  const totalExceptions = data.reduce((s, d) => s + d.value, 0);
 
   return (
-    <div className="w-full rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm flex flex-col justify-between">
-      <div>
-        <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-800">Reconciliation Status</h3>
-          <span className="text-xs font-medium text-slate-400">
-            {totals.suppliers || 0} suppliers
-          </span>
+    <div className="w-full rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-sm font-bold text-slate-800">Exceptions by Category</h3>
+        <span className="text-xs font-medium text-slate-400">
+          {totalExceptions} total
+        </span>
+      </div>
+
+      <div className="flex items-center gap-6">
+        <div className="relative h-[150px] w-[150px] shrink-0">
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span className="text-2xl font-bold text-slate-900">{totalExceptions}</span>
+            <span className="text-[11px] font-medium text-slate-500">Exceptions</span>
+          </div>
+
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                innerRadius={54}
+                outerRadius={68}
+                startAngle={90}
+                endAngle={-270}
+              >
+                {data.map((_, index) => (
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} stroke="none" />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
 
-        <div className="mb-4 text-xs text-slate-500">
-          {totals.totalInvoices || 0} total invoices processed
-        </div>
-
-        <div className="flex flex-col gap-4">
-          {rows.map((item) => (
-            <div key={item.name} className="grid grid-cols-12 items-center gap-4 text-xs font-medium">
-              <div className="col-span-4 text-slate-600 truncate">{item.name}</div>
-              <div className="col-span-2 text-slate-800 font-semibold text-right">
-                {item.count.toLocaleString()}
+        <div className="flex flex-1 flex-col gap-3 text-xs">
+          {data.map((item, idx) => (
+            <div key={item.name} className="flex items-center justify-between font-medium">
+              <div className="flex items-center gap-2">
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: COLORS[idx % COLORS.length] }}
+                />
+                <span className="text-slate-500 truncate max-w-[130px]">
+                  {item.name.replace("_", " ")}
+                </span>
               </div>
-              <div className="col-span-2 text-slate-400 text-right">
-                {item.percentage}%
-              </div>
-              <div className="col-span-4 pl-2">
-                <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${item.barColor}`}
-                    style={{ width: `${Math.min(item.percentage, 100)}%` }}
-                  />
-                </div>
-              </div>
+              <span className="text-slate-800">{item.value}</span>
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="mt-6 border-t border-slate-100 pt-3">
-        <button className="text-xs font-semibold text-blue-600 hover:underline">
-          View Reconciliation List &gt;
-        </button>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import KpiDashboardGrid from "@/components/dashboard/KpiDashboardGrid";
 import SLAComplianceChart from "@/components/dashboard/SLAComplianceChart";
 import ExceptionsByCategoryChart from "@/components/dashboard/ExceptionsByCategoryChart";
 import TopVendorsTable from "@/components/dashboard/TopVendorsTable";
-import SuppliersTable from "@/components/dashboard/SuppliersTable";
+
 import AnalystWorkloadTable from "@/components/dashboard/AnalystWorkloadTable";
 import ReconciliationStatusOverview from "@/components/dashboard/ReconciliationStatusOverview";
 import { useQuery } from "@tanstack/react-query";
@@ -76,7 +76,7 @@ export default function DashboardPage() {
     );
 
   if (!data) return <DashboardSkeleton />;
-
+console.log('reconStatusData', data.reconStatusData, data.reconTotals)
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="p-4 sm:p-6">
@@ -120,13 +120,10 @@ export default function DashboardPage() {
             />
             <ExceptionsByCategoryChart barData={data.barData} />
             <ReconciliationStatusOverview
-              data={data.reconStatusData || data.reconciliationStatus}
-              totals={data.reconTotals}
+              
+              data={data.reconStatusData}
             />
-            <ReconciliationStatusOverview
-           status={data.reconciliationStatus}
-             totals={data.reconTotals}
-           />
+         
           </div>
 
           {/* Financial + Trend */}

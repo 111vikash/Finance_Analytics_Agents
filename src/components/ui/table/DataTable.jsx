@@ -11,40 +11,13 @@ import {
 import {
   Search,
   SlidersHorizontal,
-  Sliders,
   Building2,
   CalendarDays,
   BadgeCheck,
 } from "lucide-react";
-
 import { Button } from "@/components/common/Button";
 
-const customGlobalFilterFn = (row, columnId, filterValue) => {
-  const { search, tabStatus, vendor, period, status } = filterValue || {};
-
-  if (search) {
-    const searchLower = search.toLowerCase();
-    const matchesSearch = row.getAllCells().some((cell) => {
-      const value = cell.getValue();
-      return value ? String(value).toLowerCase().includes(searchLower) : false;
-    });
-    if (!matchesSearch) return false;
-  }
-
-  if (tabStatus && tabStatus !== "All") {
-    if (tabStatus === "Exceptions") {
-      if (row.original?.status !== "Unmatched") return false;
-    } else if (row.original?.status !== tabStatus) {
-      return false;
-    }
-  }
-
-  if (vendor && vendor !== "(All)" && row.original?.vendor !== vendor) return false;
-  if (period && period !== "(All)" && row.original?.period !== period) return false;
-  if (status && status !== "(All)" && row.original?.status !== status) return false;
-
-  return true;
-};
+const normalize = (value) => String(value ?? "").toLowerCase();
 
 export const UniversalTable = ({ data = [], columns = [] }) => {
   const [globalFilter, setGlobalFilter] = useState({
@@ -56,33 +29,138 @@ export const UniversalTable = ({ data = [], columns = [] }) => {
   });
 
   const safeData = useMemo(() => (Array.isArray(data) ? data : []), [data]);
-  const safeColumns = useMemo(() => (Array.isArray(columns) ? columns : []), [columns]);
+  const safeColumns = useMemo(
+    () => (Array.isArray(columns) ? columns : []),
+    [columns]
+  );
+
+  // Build filter options from data
+  const uniqueVendors = useMemo(() => {
+    const values = safeData
+      .map((row) => row.vendor || row.supplier_name || row.name)
+      .filter(Boolean);
+    return ["(All)", ...new Set(values)];
+  }, [safeData]);
+
+  const uniquePeriods = useMemo(() => {
+    const values = safeData
+      .map((row) => row.period || row.reconciliation_date || row.report_timestamp)
+      .filter(Boolean);
+    return ["(All)", ...new Set(values)];
+  }, [safeData]);
+
+  const uniqueStatuses = useMemo(() => {
+    const values = safeData
+      .map((row) => row.status || row.match_status)
+      .filter(Boolean);
+    return ["(All)", ...new Set(values)];
+  }, [safeData]);
+
+  const tabs = useMemo(() => {
+    const matchedCount = safeData.filter((i) =>
+      normalize(i.status || i.match_status) === "matched"
+    ).length;
+
+    const partiallyMatchedCount = safeData.filter((i) =>
+      normalize(i.status || i.match_status) === "partially matched"
+    ).length;
+
+    const unmatchedCount = safeData.filter((i) =>
+      normalize(i.status || i.match_status) === "unmatched"
+    ).length;
+
+    const exceptionsCount = safeData.filter((i) => {
+      const st = normalize(i.status || i.match_status);
+      const ex = normalize(i.exception_type);
+      return st === "unmatched" || ex.length > 0;
+    }).length;
+
+    return [
+      { key: "All", label: "All Items", count: safeData.length },
+      { key: "Matched", label: "Matched", count: matchedCount },
+      {
+        key: "Partially Matched",
+        label: "Partially Matched",
+        count: partiallyMatchedCount,
+      },
+      { key: "Unmatched", label: "Unmatched", count: unmatchedCount },
+      { key: "Exceptions", label: "Exceptions", count: exceptionsCount },
+    ];
+  }, [safeData]);
+
+  const globalFilterFn = (row) => {
+    const { search, tabStatus, vendor, period, status } = globalFilter;
+
+    const rowStatus = normalize(row.original?.status || row.original?.match_status);
+    const rowVendor = row.original?.vendor || row.original?.supplier_name || row.original?.name;
+    const rowPeriod =
+      row.original?.period ||
+      row.original?.reconciliation_date ||
+      row.original?.report_timestamp;
+
+    // Search across all cell values
+    if (search.trim()) {
+      const searchLower = search.trim().toLowerCase();
+      const matchesSearch = row
+        .getAllCells()
+        .some((cell) => normalize(cell.getValue()).includes(searchLower));
+      if (!matchesSearch) return false;
+    }
+
+    // Tab filter
+    if (tabStatus !== "All") {
+      if (tabStatus === "Exceptions") {
+        const isException =
+          rowStatus === "unmatched" || normalize(row.original?.exception_type).length > 0;
+        if (!isException) return false;
+      } else if (rowStatus !== normalize(tabStatus)) {
+        return false;
+      }
+    }
+
+    // Vendor filter
+    if (vendor !== "(All)") {
+      if (normalize(rowVendor) !== normalize(vendor)) return false;
+    }
+
+    // Period filter
+    if (period !== "(All)") {
+      if (normalize(rowPeriod) !== normalize(period)) return false;
+    }
+
+    // Status dropdown filter
+    if (status !== "(All)") {
+      if (rowStatus !== normalize(status)) return false;
+    }
+
+    return true;
+  };
 
   const table = useReactTable({
     data: safeData,
     columns: safeColumns,
     state: { globalFilter },
-    onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: customGlobalFilterFn,
+    globalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: { pageSize: 10, pageIndex: 0 },
     },
+    autoResetPageIndex: false,
   });
 
-  const tabs = [
-    { key: "All", label: "All Items", count: safeData.length },
-    { key: "Matched", label: "Matched", count: safeData.filter((i) => i?.status === "Matched").length },
-    { key: "Partially Matched", label: "Partially Matched", count: safeData.filter((i) => i?.status === "Partially Matched").length },
-    { key: "Unmatched", label: "Unmatched", count: safeData.filter((i) => i?.status === "Unmatched").length },
-    { key: "Exceptions", label: "Exceptions", count: safeData.filter((i) => i?.status === "Unmatched" && i?.confidence === "-").length },
-  ];
-
-  const uniqueVendors = ["(All)", ...new Set(safeData.map((row) => row.vendor).filter(Boolean))];
-  const uniquePeriods = ["(All)", ...new Set(safeData.map((row) => row.period).filter(Boolean))];
-  const uniqueStatuses = ["(All)", "Matched", "Partially Matched", "Unmatched"];
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    table.setPageIndex(0);
+  }, [
+    globalFilter.search,
+    globalFilter.tabStatus,
+    globalFilter.vendor,
+    globalFilter.period,
+    globalFilter.status,
+    table,
+  ]);
 
   const headerGroups = table.getHeaderGroups();
   const rows = table.getRowModel().rows;
@@ -321,4 +399,4 @@ export const UniversalTable = ({ data = [], columns = [] }) => {
       </div>
     </div>
   );
-};
+}
