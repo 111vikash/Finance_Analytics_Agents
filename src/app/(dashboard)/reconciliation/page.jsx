@@ -111,20 +111,20 @@ const tableColumns = [
   { header: "Confidence", accessorKey: "confidence" },
   { header: "Exception Type", accessorKey: "exception_type" },
   { header: "Priority", accessorKey: "priority" },
-  {
-    header: "Action",
-    id: "actions",
-    cell: () => (
-      <div className="flex items-center gap-2 text-slate-400">
-        <button className="transition hover:text-slate-700">
-          <Eye size={16} />
-        </button>
-        <button className="transition hover:text-slate-700">
-          <RotateCcw size={16} />
-        </button>
-      </div>
-    ),
-  },
+  // {
+  //   header: "Action",
+  //   id: "actions",
+  //   cell: () => (
+  //     <div className="flex items-center gap-2 text-slate-400">
+  //       <button className="transition hover:text-slate-700">
+  //         <Eye size={16} />
+  //       </button>
+  //       <button className="transition hover:text-slate-700">
+  //         <RotateCcw size={16} />
+  //       </button>
+  //     </div>
+  //   ),
+  // },
 ];
 
 // ===========================================================================

@@ -8,7 +8,18 @@ export default function TopVendorsTable({ data = [] }) {
         accessorKey: "vendor",
         header: "Vendor",
         cell: (info) => (
-          <span className="font-semibold text-slate-800">{info.getValue()}</span>
+          <span className="font-semibold text-slate-800">
+            {info.getValue()}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "open",
+        header: "Open",
+        cell: (info) => (
+          <span className="font-medium text-orange-500">
+            {info.getValue()}
+          </span>
         ),
       },
       {
@@ -16,29 +27,19 @@ export default function TopVendorsTable({ data = [] }) {
         header: "Invoices",
       },
       {
-        accessorKey: "exceptions",
-        header: "Exceptions",
-        cell: (info) => (
-          <span className="font-medium text-red-500">{info.getValue()}</span>
-        ),
-      },
-      {
-        accessorKey: "highPriority",
-        header: "High Priority",
-        cell: (info) => (
-          <span className="font-medium text-orange-500">{info.getValue()}</span>
-        ),
-      },
-      {
-        accessorKey: "avgConfidence",
-        header: "Avg Confidence",
-      },
-      {
-        accessorKey: "outstanding",
-        header: "Outstanding",
-        cell: (info) => (
-          <span className="font-semibold text-slate-700">{info.getValue()}</span>
-        ),
+        accessorKey: "outstandingBalance",
+        header: "Outstanding Balance",
+        cell: (info) => {
+          const value = Number(info.getValue() || 0);
+          return (
+            <span className="font-semibold text-slate-700">
+              {value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+          );
+        },
       },
     ],
     []
@@ -48,8 +49,8 @@ export default function TopVendorsTable({ data = [] }) {
 
   return (
     <CompactDataTable
-      title="Top Vendors by Exceptions"
-      subtitle="Vendors with the highest exception volume from reconciliation."
+      title="Top Vendors"
+      subtitle="Vendors with the highest open reconciliation volume."
       data={limitedData}
       columns={columns}
       footerActionText="View All Vendors >"

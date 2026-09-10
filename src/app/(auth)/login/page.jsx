@@ -20,7 +20,7 @@ import { useAuthStore } from "@/store/auth-store";
 const demoUsers = [
   {
     name: "Ava Johnson",
-    email: "ava.johnson@capgemini.com",
+    email: "analyst@capgemini.com",
     role: "AP Analyst",
     scope: "Assigned vendors",
     limit: "$10K",
@@ -46,8 +46,8 @@ const demoUsers = [
     color: "emerald",
   },
   {
-    name: "David Kim",
-    email: "david.kim@capgemini.com",
+    name: "vigneshwaran",
+    email: "d-vigneshwaran.d-vigneshwaran@capgemini.com",
     role: "Auditor",
     scope: "All vendors (read-only)",
     limit: "$0",
@@ -55,8 +55,8 @@ const demoUsers = [
     color: "amber",
   },
   {
-    name: "Priya Sharma",
-    email: "priya.sharma@capgemini.com",
+    name: "venkatraman",
+    email: "venkatraman.a.m@capgemini.com",
     role: "Admin",
     scope: "Full access",
     limit: "Unlimited",

@@ -33,7 +33,7 @@ export default function LineTrendChart({ trendData = [] }) {
         </select>
       </div>
 
-      <div className="h-[360px] w-full">
+      <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f1f5f9" />
