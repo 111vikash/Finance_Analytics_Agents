@@ -16,7 +16,7 @@ export default function KpiCard({
   // Common classes
   const cardBase = `group h-full rounded-xl border p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:p-3.5 ${
     vertical
-      ? "flex min-h-[170px] flex-col items-center text-center"
+      ? "flex  flex-col items-center text-center"
       : "flex  items-stretch"
   } ${cardBgColor} ${accent.border || "border-[var(--border)]"}`;
 
@@ -31,11 +31,11 @@ export default function KpiCard({
     isTrendPositive ? "text-emerald-600" : "text-rose-600"
   }`;
 
-  const trendIcon = isTrendPositive ? (
-    <ArrowUpRight className="h-3 w-3" />
-  ) : (
-    <ArrowDownRight className="h-3 w-3" />
-  );
+  // const trendIcon = isTrendPositive ? (
+  //   <ArrowUpRight className="h-3 w-3" />
+  // ) : (
+  //   <ArrowDownRight className="h-3 w-3" />
+  // );
 
   if (vertical) {
     return (
@@ -48,10 +48,10 @@ export default function KpiCard({
           <div className={labelClass}>{label}</div>
           <div className={`${valueClass} mt-1`}>{value}</div>
 
-          <div className={`mt-auto pt-3 ${trendClass}`}>
+          {/* <div className={`mt-auto pt-3 ${trendClass}`}>
             {trendIcon}
-            <span>{change}</span>
-          </div>
+            <span>{change}</span> */}
+          {/* </div> */}
         </div>
       </div>
     );
@@ -70,10 +70,10 @@ export default function KpiCard({
           <div className={valueClass}>{value}</div>
         </div>
 
-        <div className={`mt-2 ${trendClass}`}>
+        {/* <div className={`mt-2 ${trendClass}`}>
           {trendIcon}
           <span>{change}</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

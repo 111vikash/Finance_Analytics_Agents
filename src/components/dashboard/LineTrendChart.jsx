@@ -15,14 +15,13 @@ const TREND_COLORS = {
   open: "#22c55e",
 };
 
-export default function LineTrendChart({
-  trendData = [],
-}) {
+export default function LineTrendChart({ trendData = [] }) {
+  // Map API data to the old chart structure
   const chartData = trendData.map((item) => ({
     name: item.name,
-    matched: item.matched,
-    exceptions: item.exceptions,
-    open: item.open,
+    matched: item.matched ?? 0,
+    exceptions: item.exceptions ?? 0,
+    open: item.open ?? 0,
   }));
 
   return (
@@ -34,7 +33,7 @@ export default function LineTrendChart({
         </select>
       </div>
 
-      <div className="h-[360px] w-full">
+      <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="0" vertical={false} stroke="#f1f5f9" />

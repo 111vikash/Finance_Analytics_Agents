@@ -1,0 +1,14 @@
+targets:
+  prod:
+    mode: production
+    workspace:
+      host: https://your-workspace.cloud.databricks.com
+      root_path: /Workspace/Users/<owner>/.bundle/${bundle.name}/${bundle.target}
+    resources:
+      apps:
+        my_nextjs_app:
+          name: my-nextjs-app
+          git_repository:
+            url: https://github.com/your-org/your-nextjs-app
+          git_source:
+            branch: main

@@ -16,31 +16,42 @@ export default function TopVendorsTable({ data = [] }) {
       {
         accessorKey: "open",
         header: "Open",
-      },
-      {
-        accessorKey: "overdue",
-        header: "Overdue",
         cell: (info) => (
-          <span className="font-medium text-red-500">{info.getValue()}</span>
+          <span className="font-medium text-orange-500">
+            {info.getValue()}
+          </span>
         ),
       },
       {
-        accessorKey: "days",
-        header: ">10 Days",
+        accessorKey: "totalInvoices",
+        header: "Invoices",
       },
       {
-        accessorKey: "avgTime",
-        header: "Avg Days",
+        accessorKey: "outstandingBalance",
+        header: "Outstanding Balance",
+        cell: (info) => {
+          const value = Number(info.getValue() || 0);
+          return (
+            <span className="font-semibold text-slate-700">
+              {value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+          );
+        },
       },
     ],
     []
   );
 
+  const limitedData = React.useMemo(() => data.slice(0, 5), [data]);
+
   return (
     <CompactDataTable
-      title="Top 5 Vendors by Open Exceptions"
-      subtitle="Overview of vendors with the highest open exception volume."
-      data={data}
+      title="Top Vendors"
+      subtitle="Vendors with the highest open reconciliation volume."
+      data={limitedData}
       columns={columns}
       footerActionText="View All Vendors >"
     />
